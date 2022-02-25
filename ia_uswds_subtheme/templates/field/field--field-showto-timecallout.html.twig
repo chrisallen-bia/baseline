@@ -1,0 +1,13 @@
+{# Time Callout #}
+<section id="time-callout" class="margin-y-4">
+    <div class="usa-alert usa-alert--info usa-alert--no-icon">
+        <div class="usa-alert__body">
+            <div class="usa-alert__text display-flex flex-align-center">
+                <i class="far fa-alarm-clock margin-right-4 font-body-xl" aria-hidden="true"></i>
+                {% for item in items %}
+                    <div{{ item.attributes }}>{{ item.content }}</div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</section>

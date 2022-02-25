@@ -1,0 +1,88 @@
+{#
+/**
+ * @file
+ * Theme override for :
+ * Paragraph = Tribal Consultations - Display Full format
+ * @author christopherj.allen@bia.gov
+ */
+#}
+
+{% set startDate =  paragraph.field_startenddate.0.entity.field_startenddate_start.0.value|date("D, M j, Y") %}
+{% set startTime =  paragraph.field_startenddate.0.entity.field_startenddate_start.0.value|date("g:i A") %}
+{% set endTime =  paragraph.field_startenddate.0.entity.field_startenddate_end.0.value|date("g:i A") %}
+{% set timeZone =  paragraph.field_startenddate.0.entity.field_time_zone.0.value %}
+
+<li class="tablet:grid-col-6 usa-card usa-card--header-first">
+    <div class="usa-card__container">
+        <header class="usa-card__header">
+            <div class="display-flex flex-row flex-align-start flex-justify-start">
+                <div class="display-flex flex-column flex-align-center margin-right-3 text-base">
+                    <div class="font-sans-xl line-height-sans-1 padding-bottom-1px">
+                        {{ node.field_startenddate.value|date('d') }}
+                    </div>
+                    <div class="font-sans-md">
+                        {{ node.field_startenddate.value|date('M') }}
+                    </div>
+                </div><!-- /.display-flex flex-column flex-align-center margin-right-3 text-base -->
+                <div>
+                    <h3 class="usa-card__heading padding-y-2px">
+                        {{ content.field_tc_sessiontitle }}
+                    </h3>
+                    <div class="text-no-wrap">
+                        <span class="usa-tag bg-base">
+                            {% if content.field_tc_sessiontype %}
+                                {{ content.field_tc_sessiontype.0 }}
+                            {% endif %}
+                        </span>
+                        <span class="usa-tag bg-base">
+                            {% if content.field_serviceevent_attendingmode %}
+                                {{ content.field_serviceevent_attendingmode.0 }}
+                            {% endif %}
+                        </span>
+                    </div>
+                </div>
+            </div><!-- ./display-flex flex-row flex-align-start flex-justify-start -->
+        </header>
+        
+        <div class="usa-card__body">
+            <h4 class="margin-bottom-2">Details</h4>
+            <div>
+                <ul class="usa-icon-list margin-bottom-3">
+                    <li class="usa-icon-list__item">
+                        <div class="usa-icon-list__icon">
+                            <i title="Start and End Date(s)" class="far fa-calendar-alt text-base" aria-hidden="true" role="img"></i>
+                            <span class="sr-only">Start and End Date(s)</span>
+                        </div>
+                        <div class="usa-icon-list__content">
+                            <span class="usa-sr-only">Start and End Date(s): </span>{{ startDate }}
+                        </div>
+                    </li>
+                    <li class="usa-icon-list__item">
+                        <div class="usa-icon-list__icon">
+                            <i title="Time" class="far fa-clock text-base" aria-hidden="true" role="img"></i>
+                            <span class="sr-only">Time</span>
+                        </div>
+                        <div class="usa-icon-list__content">
+                            <span class="usa-sr-only">Time:</span>
+                            {{ startTime }} - {{ endTime }} {{ timeZone }}
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div><!-- /.usa-card__body -->
+        
+        <div class="usa-card__footer">
+            <ul class="usa-button-group flex-column">
+                <li class="usa-button-group__item">
+                    {% if content.field_tc_eventregister  %}
+                        {{ content.field_tc_eventregister }}
+                    {% endif %}
+                    {% if content.field_tc_transcript  %}
+                        {{ content.field_tc_transcript }}
+                    {% endif %}
+                </li>
+            </ul>
+        </div><!-- /.usa-card__footer -->
+    </div><!-- ./usa-card__container -->
+</li>
+

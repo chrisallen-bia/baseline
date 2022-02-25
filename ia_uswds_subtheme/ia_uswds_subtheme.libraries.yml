@@ -1,0 +1,33 @@
+assets:
+  version: VERSION
+  css:
+    theme:
+      assets/css/uswds.css: {}
+  js:
+    assets/js/uswds.min.js: {}
+
+uswds_custom:
+  version: VERSION
+  css:
+    theme:
+      css/uswds_base.css: {}
+  js:
+    js/uswds_base.js: {}
+
+ia_uswds:
+  version: VERSION
+  css:
+    theme:
+      css/ia-uswds.css: {}
+      css/ia-uswds-fonts.css: {}
+      css/ia-google-custom-search.css: {}
+
+fontawesome:
+  version: VERSION
+  js:
+    https://kit.fontawesome.com/fd9f9ab0f1.js: { type: external }
+
+gcse:
+  version: VERSION
+  js:
+    https://cse.google.com/cse.js?cx=002818869614302363726:1izp9nzvpzy: { type: external }

@@ -1,0 +1,10 @@
+{% block paragraph %}
+    {% block content %}
+      {{ content.field_fa_commenttype }}
+     {% set event_start_date = content.field_fa_commentperiod.0.start_date["#attributes"]["datetime"] %}
+     {% set event_end_date = content.field_fa_commentperiod.0.end_date["#attributes"]["datetime"] %}
+     {{ event_start_date | date('U') | format_date('custom', 'M d Y') }}
+     {{ event_end_date | date('U') | format_date('custom', 'M d Y') }}
+    {% if event_end_date|date('U') >= 'now'|date('U') %} {{ 'Open' }} {% else %} {{ 'Close' }} {% endif %} 
+    {% endblock %}
+{% endblock paragraph %}

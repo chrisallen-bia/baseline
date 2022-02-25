@@ -1,0 +1,11 @@
+{%
+    set classes = [
+    'user-defined-section'
+]
+%}
+
+<section{{ attributes.addClass(classes) }}>
+    {% for item in items %}
+        {{ item.content }}
+    {% endfor %}
+</section>

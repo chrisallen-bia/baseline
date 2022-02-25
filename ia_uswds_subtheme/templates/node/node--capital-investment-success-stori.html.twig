@@ -1,0 +1,43 @@
+{#
+/**
+ * @file
+ * Default theme implementation to display a 'Capital Investment Success Stories' node.
+ * ----
+ * @author - chad.thoreson@bia.gov
+ * ----
+#}
+
+{% extends '/themes/custom/ia_uswds_subtheme/templates/includes/node_layout.html.twig' %}
+{% block body %}
+    <div class="grid-row">
+        <div class="tablet:grid-col-12">
+            <!-- Outputs images to float right -->
+            {% if content.field_ieed_image %}
+                <div class="capital-investment-images">
+                    <div class="desktop:grid-col-3 float-right desktop:width-mobile mobile:width-card padding-left-2 padding-top-2 padding-bottom-2">
+                        {{ content.field_ieed_image }}
+                    </div><!-- /desktop:grid-col-3 -->
+                </div><!-- /capital-investment-images -->
+            <!-- Outputs Body -->
+                {{ content.body }}
+            {% endif %}
+            <hr>
+            <div class="text-bold">{{ node.field_ieed_type_of_service.fieldDefinition.label }}:</div>
+                {{ content.field_ieed_type_of_service.0 }}
+            <div class="text-bold">{{ node.field_ieed_lender.fieldDefinition.label }}:</div>
+                {{ content.field_ieed_lender.0 }}
+            <div class="text-bold">{{ node.field_ieed_borrower.fieldDefinition.label }}:</div>
+                {{ content.field_ieed_borrower.0 }}
+            <div class="text-bold">{{ node.field_ieed_project.fieldDefinition.label }}:</div>
+                {{ content.field_ieed_project.0 }}
+            <div class="text-bold">{{ node.field_ieed_financing_amount.fieldDefinition.label }}:</div>
+                {{ content.field_ieed_financing_amount.0 }}
+            <div class="text-bold">{{ node.field_ieed_cap_inv_location.fieldDefinition.label }}:</div>
+                {{ content.field_ieed_cap_inv_location.0 }}
+            {% if content.field_ieed_file_upload %}
+            <div class="text-bold">{{ node.field_ieed_file_upload.fieldDefinition.label }}:</div>
+                {{ content.field_ieed_file_upload.0 }};
+            {% endif %}
+        </div><!-- /tablet:grid-col-12 -->
+    </div><!-- /grid-row -->
+{% endblock body %}

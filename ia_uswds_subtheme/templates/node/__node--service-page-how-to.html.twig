@@ -1,0 +1,250 @@
+{#
+/**
+ * @file
+ * Default theme implementation to display a 'Service Page How To' node.
+ * ----
+ * @author - christopherj.allen@bia.gov
+ * ----
+ * Available variables:
+ * - node: The node entity with limited access to object properties and methods.
+ *   Only method names starting with "get", "has", or "is" and a few common
+ *   methods such as "id", "label", and "bundle" are available. For example:
+ *   - node.getCreatedTime() will return the node creation timestamp.
+ *   - node.hasField('field_example') returns TRUE if the node bundle includes
+ *     field_example. (This does not indicate the presence of a value in this
+ *     field.)
+ *   - node.isPublished() will return whether the node is published or not.
+ *   Calling other methods, such as node.delete(), will result in an exception.
+ *   See \Drupal\node\Entity\Node for a full list of public properties and
+ *   methods for the node object.
+ * - label: (optional) The title of the node.
+ * - content: All node items. Use {{ content }} to print them all,
+ *   or print a subset such as {{ content.field_example }}. Use
+ *   {{ content|without('field_example') }} to temporarily suppress the printing
+ *   of a given child element.
+
+ * - date: (optional) Themed creation date field.
+ * - author_name: (optional) Themed author name field.
+ * - url: Direct URL of the current node.
+ * - display_submitted: Whether submission information should be displayed.
+ * - attributes: HTML attributes for the containing element.
+ *   The attributes.class element may contain one or more of the following
+ *   classes:
+ *   - node: The current template type (also known as a "theming hook").
+ *   - node--type-[type]: The current node type. For example, if the node is an
+ *     "Article" it would result in "node--type-article". Note that the machine
+ *     name will often be in a short form of the human readable label.
+ *   - node--view-mode-[view_mode]: The View Mode of the node; for example, a
+ *     teaser would result in: "node--view-mode-teaser", and
+ *     full: "node--view-mode-full".
+
+ * - title_attributes: Same as attributes, except applied to the main title
+ *   tag that appears in the template.
+ * - content_attributes: Same as attributes, except applied to the main
+ *   content tag that appears in the template.
+ * - author_attributes: Same as attributes, except applied to the author of
+ *   the node tag that appears in the template.
+ * - title_prefix: Additional output populated by modules, intended to be
+ *   displayed in front of the main title tag that appears in the template.
+ * - title_suffix: Additional output populated by modules, intended to be
+ *   displayed after the main title tag that appears in the template.
+ * - view_mode: View mode; for example, "teaser" or "full".
+ * - teaser: Flag for the teaser state. Will be true if view_mode is 'teaser'.
+ * - page: Flag for the full page state. Will be true if view_mode is 'full'.
+ *
+#}
+
+<style>
+    .ia-section-title h2 {
+        color: #fff !important;
+        display: block;
+        font-size: 1.5em !important;
+        margin-block-start: 0.83em !important;
+        margin-block-end: 0.83em !important;
+        margin-inline-start: 0px !important;
+        margin-inline-end: 0px !important;
+        font-weight: bold !important;
+        padding: 0 !important;
+    }
+    #quick-action{
+        margin: 0.5rem 0;
+        min-height: 92.8px;
+        text-align: left;
+        display: flex;
+        flex-direction: column;
+        width:100%;
+    }
+    #quick-action a{
+        font-size: 1.13rem;
+        font-weight: normal !important;
+        justify-content: center;
+        background: transparent;
+        border: 2px solid;
+        border-color: #73b3e7;
+        border-radius: .5rem;
+        box-shadow: 0 0.25rem 0.5rem 0 rgb(0 0 0 / 10%);
+        padding: 1rem 2rem;
+        display: flex;
+        align-items: center;
+        height: 95%;
+    }
+</style>
+
+{%
+    set classes = [
+    'grid-container',
+    'grid-row'
+]
+%}
+
+<div class="bg-accent-warm-10">
+
+</div>
+
+<div class="bg-gray-10">
+    <div class="grid-container padding-y-2">
+        <div class="grid-row">
+            <div class="tablet:grid-col-6 font-sans-xs">
+                <div id="related_to" class="text-uppercase">
+                    <span class="margin-right-1">Related to</span>
+                        {%- for item in content.field_relative_services_org.0['#paragraph'].field_related_services -%}
+
+                            <a href="{{ url('entity.node.canonical', {'node': item.entity.nid.value}) }}">{{ item.entity.title.value|e }}</a><br>
+                        {%- endfor -%}
+                </div>
+            </div>
+            <div class="tablet:grid-col-6 font-sans-xs">
+                <div id="provided_by" class="text-uppercase">
+                    <span class="margin-right-1">Provided By</span>
+                        {%- for item in content.field_relative_services_org.0['#paragraph'].field_provided_by -%}
+                          
+                            <a href="{{ url('entity.node.canonical', {'node': item.entity.nid.value}) }}">{{ item.entity.title.value|e }}</a><br>
+                        {%- endfor -%}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<article{{ attributes.addClass(classes)}}>
+
+    <!-- SHORT DESCRIPTION -->
+    {% if content.field_summary_box %}
+        <section id="short-description" class="margin-y-4">
+            <div class="grid-row grid-gap">
+                <div class="grid-col-12">
+                    <div class="short-desc">
+                        {{ node.field_summary_box.entity.field_summary_box_content|view  }}
+                    </div>
+                </div>
+            </div>
+        </section>
+    {% endif %}
+    <!-- /SHORT DESCRIPTION -->
+
+    <!-- Important Information -->
+    {% if content.field_important_information %}
+    <section id="time-callout" class="margin-y-4">
+        <div class="usa-alert usa-alert--info usa-alert--no-icon">
+            <div class="usa-alert__body">
+                <div class="usa-alert__text display-flex flex-align-center">
+                    <i class="far fa-alarm-clock margin-right-4 font-body-xl" aria-hidden="true"></i>
+                        {{ content.field_important_information }}
+                </div>
+            </div>
+        </div>
+    </section>
+    {% endif %}
+    <!-- /Time Callout -->
+
+    <!-- Quick Action -->
+    {% if content.field_servicepage_tasks %}
+    <section id="quick-action" class="margin-y-4">
+        <div class="grid-row grid-gap-6">
+            {{ content.field_servicepage_tasks }}
+        </div>
+    </section>
+    {% endif %}
+    <!-- /Quick Action -->
+
+    <!-- The Details -->
+    <section id="the-details" class="margin-y-4">
+        <div class="grid-row grid-gap ia-section-title bg-primary-dark">
+            <div class="grid-col-12">
+                <h2 class="ia-section-title">The Details</h2>
+            </div>
+        </div>
+
+        <!-- What you need -->
+        {% if content.field_showto_whatyouneed %}
+        <div id="what-you-need-to-know" class="margin-y-4">
+            <div class="grid-row grid-gap">
+                <div class="grid-col-12">
+                    <h2 class="call-out">{{ node.field_showto_whatyouneed.fieldDefinition.label }}</h2>
+                        <div>{{ content.field_showto_whatyouneed }}</div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+        <!-- /What you need -->
+        <!-- How to... -->
+        {%  if content.field_infodesc_sectiondetail %}
+        <div id="how-to-methods" class="margin-y-4">
+            <div class="grid-row grid-gap">
+                <div class="grid-col-12">
+                    <h2>How to {{ content.field_showto_actionverb.0 }}</h2>
+                    {{ content.field_infodesc_sectiondetail }}
+                </div>
+            </div>
+        </div>
+        {% endif %}
+        <!-- /How to Apply -->
+
+        <!-- Block Reference  -->
+       {# nothing here #}
+        <!-- /Block Reference  -->
+
+        <!-- Next steps -->
+        {% if content.field_showto_next_steps %}
+        <div id="next-steps" class="margin-y-4">
+            <div class="grid-row grid-gap">
+                <div class="grid-col-12">
+                    <h2 class="call-out">{{ node.field_showto_next_steps.fieldDefinition.label }}</h2>
+                        {{ content.field_showto_next_steps }}
+                </div>
+            </div>
+        </div>
+        {% endif %}
+        <!-- /Next steps -->
+
+        <!-- Additional Information -->
+        {%  if content.field_showto_additionalinfo %}
+        <section id="additional-information" class="margin-y-4">
+            <div class="grid-row grid-gap">
+                <div class="grid-col-12">
+                    <h2 class="call-out">{{ node.field_showto_additionalinfo.fieldDefinition.label }}</h2>
+                    {{ content.field_showto_additionalinfo  }}
+                </div>
+            </div>
+        </section>
+        {% endif %}
+        <!-- /Additional Information -->
+
+        <!-- RELATED DOCUMENTS and CONTACT US Area -->
+        <section id="related-docs-and-contact" class="margin-top-8">
+            <div class="grid-row margin-top-2 ">
+                <div class="tablet:grid-col-4 desktop:grid-col-5 padding-2">
+                    {% if content.field_related %}
+                        <h3>Downloads</h3>
+                        <div class="usa-list margin-top-0">
+                            {{ content.field_related }}
+                        </div>
+                    {% endif %}
+                </div><!-- /.tablet:grid-col-5 padding-2 -->
+                <div class="tablet:grid-col">
+                    {% if content.field_contact_us %}
+                        {{ content.field_contact_us }}
+                    {% endif %}
+                </div>
+            </div>
+        </section><!-- /RELATED DOCUMENTS and CONTACT US Area -->
+</article>

@@ -1,0 +1,74 @@
+{#
+/**
+ * @file
+ * Default theme implementation to display a 'Fire Stories' node.
+ * ----
+ * @author - chad.thoreson@bia.gov
+ * ----
+#}
+<style>
+    .fire-story-images img,
+    .capital-investment-images img,
+    .pr-images img,
+    .bio-image img {
+        width:100%;
+        height:auto;
+    }
+
+    .fire-story-images blockquote.image-field-caption{
+        text-align:left;
+    }
+
+</style>
+
+{% extends '/themes/custom/ia_uswds_subtheme/templates/includes/node_layout.html.twig' %}
+{% block body %}
+    {% if not page %}
+        <h2{{ title_attributes }}>
+            <a href="{{ node_url }}">
+                {{ label }}
+            </a>
+        </h2>
+    {% endif %}
+    {% if node.isPublished() == false %}
+        <div class="unpublished">Unpublished</div>
+    {% endif %}
+
+    {% set fire_story_date = node.field_date_fire_stories.0.value ? node.field_date_fire_stories.0.value|date('U')|format_date('custom', 'M Y') : '' %}
+
+    <div class="grid-row">
+        <div class="tablet:grid-col-12">
+            <div class="border-bottom padding-bottom-3">
+                {% if fire_story_date %}
+                <strong>Date Published: </strong>{{ fire_story_date }}<br/>
+                {% endif %}
+                {% if content.field_author_fire_stories.0 %}
+                <strong>Author: </strong>{{ content.field_author_fire_stories.0 }}<br/>
+                {% endif %}
+                {% if content.field_office_contact_fire_story.0 %}
+                <strong>Office Contact - Phone Number: </strong>{{ content.field_office_contact_fire_story.0 }}
+                {% endif %}
+            </div><!--/border-bottom padding-bottom-3 -->
+            <!-- Outputs images to float right -->
+            {% if content.field_image_fire_stories.0 %}
+            <div class="fire-story-images">
+                <div class="desktop:grid-col-3 float-right desktop:width-mobile mobile:width-card padding-left-2 padding-top-2 padding-bottom-2">
+                    {{ content.field_image_fire_stories }}
+                </div>
+            </div>
+            {% endif %}
+            <?php endif; ?>
+            <!-- Outputs Body -->
+            {{ content.body }}
+
+            {% if content.field_program_area.0 %}
+            <strong>Program Area: </strong>
+            {{ content.field_program_area.0 }}<br/>
+            {% endif %}
+            {% if content.field_files_fire_stories.0 %}
+                <strong>Files:</strong><br/>
+                {{ content.field_files_fire_stories }}
+            {% endif %}
+        </div><!-- /tablet:grid-col-12 padding-right-2 -->
+    </div><!-- /grid-row -->
+{% endblock %}

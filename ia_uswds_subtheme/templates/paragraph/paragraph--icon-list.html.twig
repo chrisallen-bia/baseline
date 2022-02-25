@@ -1,0 +1,25 @@
+{%
+    set classes = [
+    'paragraph',
+    'paragraph--type--' ~ paragraph.bundle|clean_class,
+    view_mode ? 'paragraph--view-mode--' ~ view_mode|clean_class,
+    not paragraph.isPublished() ? 'paragraph--unpublished'
+]
+%}
+
+{% block paragraph %}
+    {% block content %}
+        <div {{ attributes.addClass(classes) }}>
+            <div class="grid-row">
+                <div class="tablet:grid-col">
+                    {% if content.field_message is not empty %}
+                        <p class="margin-bottom-2">{{ content.field_message }}</p>
+                    {% endif %}
+                    <ul class="usa-icon-list">
+                        {{ content.field_icon_list_item }}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    {% endblock %}
+{% endblock paragraph %}

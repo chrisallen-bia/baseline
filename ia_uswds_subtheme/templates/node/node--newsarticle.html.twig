@@ -1,0 +1,156 @@
+{#
+/**
+ * @file
+ * Default theme implementation to display a 'News Article' node.
+ * ----
+ * @author - christopherj.allen@bia.gov
+ * ----
+#}
+
+{#  NewsArticle 'types' field values:
+        announcement|Announcement
+        fed_reg|Federal Register Notice
+        med_adv|Media Advisory
+        press_rel|Press Release
+        tll|Dear Tribal Leader Letter
+#}
+
+{% extends '/themes/custom/ia_uswds_subtheme/templates/includes/node_layout.html.twig' %}
+{% block body %}
+    {% set contact = {
+        'address' : node.field_contact_us.entity.field_contactus_address.value,
+        'city' : node.field_contact_us.entity.field_contactus_city.value,
+        'email' : node.field_contact_us.entity.field_contactus_email.value,
+        'fax' : node.field_contact_us.entity.field_contactus_fax.value,
+        'officename' : node.field_contact_us.entity.field_contactus_officename.value,
+        'phone' : node.field_contact_us.entity.field_contactus_phone.value,
+        'phonecallhours' : node.field_contact_us.entity.field_contactus_phonecallhours.value,
+        'state' : node.field_contact_us.entity.field_tld_state.value,
+        'zip' : node.field_contact_us.entity.field_contactus_zip.value
+    } %}
+
+    {% set start_date_na = node.field_startenddate.entity.field_startenddate_start.0.value ? node.field_startenddate.entity.field_startenddate_start.0.value|date('U')|format_date('custom', 'F d, Y') : '' %}
+    {% set end_date_na = node.field_startenddate.entity.field_startenddate_end.0.value ? node.field_startenddate.entity.field_startenddate_end.0.value|date('U')|format_date('custom', 'F d, Y') : '' %}
+    {% set start_date_na_time = node.field_startenddate.entity.field_startenddate_start.0.value ? node.field_startenddate.entity.field_startenddate_start.0.value|date('U')|format_date('custom', 'F d, Y g:i a') : '' %}
+    {% set end_date_na_time = node.field_startenddate.entity.field_startenddate_end.0.value ? node.field_startenddate.entity.field_startenddate_end.0.value|date('U')|format_date('custom', 'F d, Y g:i a') : '' %}
+
+    <!-- If type = PressRelease  -->
+    {% if node.field_news_types.0.value == 'press_rel' %}
+        <div class="grid-row grid-gap-6">
+                <div class="tablet:grid-col-8 margin-top-2 padding-right-4">
+                    <div class="border-bottom margin-bottom-2 padding-bottom-2">
+                        <div class="display-inline-block text-bold">For Immediate Release:</div>
+                        {{ start_date_na }}
+                    </div><!--./border-bottom margin-bottom-2 padding-bottom-2 -->
+                    {# outputs body #}
+                    {% if content.body %}
+                        {{ content.body }}
+                    {% endif %}
+                </div><!--./display-inline-block text-bold -->
+                {# Outputs Images if any #}
+                <div class="tablet:grid-col-4 margin-bottom-2 float-right padding-left-2">
+                    {% if content.field_successstory_storyimage %}
+                        <div class="responsive-image-news">
+                            {{ content.field_successstory_storyimage }}
+                        </div>
+                        <span class="text-italic">{{ node.field_successstory_storyimage.title }}</span>
+                    {% endif %}
+
+                    <!-- RELATED DOCUMENTS and CONTACT US Area -->
+                    {% if content.field_news_related %}
+                        <div class="margin-top-2 margin-bottom-2">
+                            <h2>Related Page or Document</h2>
+                            <!-- Related Page or Document fields -->
+                            <ul>
+                                {% for key, item in content.field_news_related if key|first != '#' %}
+                                    <li>{{ item }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div><!-- /margin-top-2 margin-bottom-2 -->
+                    {% endif %}
+
+                    {# Contact Us #}
+                        {% include '/themes/custom/ia_uswds_subtheme/templates/includes/contact-us-card.html.twig' with {'contact': contact, 'layout': 'full'} %}
+
+                        {% if contact_us_component_full_width %}
+                            <div class="tablet:grid-col-12 margin-top-205">
+                                {{ contact_us_component_full_width }}
+                            </div> <!-- /tablet:grid-col-12 margin-top-205 -->
+                        {% endif %}
+                </div> <!-- ./tablet:grid-col-4 margin-bottom-2 float-right padding-left-2-->
+        </div><!-- /grid-row grid-gap-6-->
+
+    <!-- All other newsTypes -->
+    {% else %}
+    <div class="grid-row">
+        <div class="tablet:grid-col-8 margin-top-2 padding-right-4">
+                {% if node.field_startenddate.entity.field_startenddate_start.value %}
+                    {% if start_date_na %}
+                        <span class="text-bold">Dates: </span>
+                        {{ start_date_na_time ~ ' to ' ~ end_date_na_time }}
+                    {% else %}
+                        <span class="text-bold">Dates: </span>
+                        {{ start_date_na }}
+                    {% endif %}
+                {% endif %}
+
+                {# outputs body #}
+                {% if content.body %}
+                    {{ content.body }}
+                {% endif %}
+        </div> <!-- /tablet:grid-col-8 margin-top-2 padding-right-4 -->
+
+        <div class="tablet:grid-col-4 margin-top-2 padding-right-4">
+            {% if content.field_successstory_storyimage or content.field_announcement_video %}
+                <div class="news-article-media-area margin-bottom-2">
+                    {{ content.field_successstory_storyimage }}
+                    <span class="text-italic margin-bottom-4">{{ node.field_successstory_storyimage.title }}</span>
+                    {{ content.field_announcement_video }}
+                </div><!-- /.news-article-media-area margin-bottom-2 -->
+            {% endif %}
+            <!-- RELATED DOCUMENTS and CONTACT US Area -->
+            {% if content.field_news_related %}
+                <div class="margin-top-2 margin-bottom-2">
+                    <h2>Related Page or Document</h2>
+                    <!-- Related Page or Document fields -->
+                    <ul>
+                        {% for key, item in content.field_news_related if key|first != '#' %}
+                            <li>{{ item }}</li>
+                        {% endfor %}
+                    </ul>
+                </div><!-- /margin-top-2 margin-bottom-2 -->
+            {% endif %}
+
+            {# Contact Us #}
+            {% include '/themes/custom/ia_uswds_subtheme/templates/includes/contact-us-card.html.twig' with {'contact': contact, 'layout': 'full'} %}
+
+            {% if contact_us_component_full_width %}
+                <div class="tablet:grid-col-12 margin-top-205">
+                    {{ contact_us_component_full_width }}
+                </div> <!-- /tablet:grid-col-12 margin-top-205 -->
+            {% endif %}
+
+        </div><!-- /.tablet:grid-col-4 margin-top-2 padding-right-4 -->
+    </div><!-- /.grid-row -->
+    {% endif %}
+{% endblock body %}
+
+{% block schema %}
+    <script type='application/ld+json'>
+        {
+            "@context": "https://schema.org",
+            "@type": "NewsArticle",
+            "url": "https://www.bia.gov<?php print $node_url;?>",
+            "publisher":{
+                "@type":"Organization",
+                "name":"Indian Affairs",
+                "logo":"{{ url('<front>')|render ~  directory }}/assets/img/ia-logos/bureau_of_indian_affairs_seal.png"
+            },
+            "headline": "{{ node.label }}",
+            "mainEntityOfPage": "{{ url('<current>') }}",
+            "abstract": "{{ node.body.summary | replace({"\r" : "", "\n" : "" }) }} ",
+            "articleBody":  " {{ content.body.0 }} ",
+            "datePublished": "{{ content.field_startenddate }}"
+        }
+</script>
+{% endblock schema %}

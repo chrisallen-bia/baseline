@@ -1,0 +1,18 @@
+{%
+    set title_classes = [
+    label_display == 'visually_hidden' ? 'usa-sr-only'
+]
+%}
+
+<div class="margin-y-4">
+    {% if not label_hidden %}
+        {% set header_id = label|clean_id %}
+        <h3{{ title_attributes.addClass(title_classes).setAttribute('id', header_id) }}>{{ label }}</h3>
+    {% endif %}
+
+    <ul class="usa-list margin-top-0">
+        {% for item in items %}
+            <li>{{ item.content }}</li>
+        {% endfor %}
+    </ul>
+</div>

@@ -1,0 +1,16 @@
+{%
+    set title_classes = [
+    label_display == 'visually_hidden' ? 'usa-sr-only',
+]
+%}
+
+<div{{ attributes }}>
+    {% if label_hidden==false %}
+        <h4{{ title_attributes.addClass(title_classes) }}>{{ label }}</h4>
+    {% endif %}
+    <ul class="usa-list FERMINTEST">
+        {% for item in items %}
+            <li{{ item.attributes }}>{{ item.content }}</li>
+        {% endfor %}
+    </ul>
+</div>

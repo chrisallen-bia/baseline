@@ -1,0 +1,64 @@
+<script type="text/javascript">
+    (function() {
+        const sections = document.querySelectorAll(".user-defined-section");
+
+        if(sections && sections.length > 1) {
+
+            var tocHtml = "";
+
+            for (let i = 0; i < sections.length; i++) {
+                tocHtml +=
+                    `<li class="usa-sidenav__item">
+                            <a href="#${sections[i].id}">${sections[i].children[0].innerText}</a>
+                        </li>`;
+            }
+
+            document.getElementById('table-of-contents').innerHTML = tocHtml;
+
+            //If not on a phone
+            if (!(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent))) {
+                document.getElementById('toc-container').classList.add('position-sticky', 'top-1');
+
+                // Necessary to get the correct top of each section, offsetTop is not sufficient in and of itself
+                const getOffsetTop = element => {
+                    let offsetTop = 0;
+                    while(element) {
+                        offsetTop += element.offsetTop;
+                        element = element.offsetParent;
+                    }
+                    return offsetTop;
+                }
+
+                // grab the sections (targets) and menu_links (triggers)
+                // for menu items to apply active link styles to
+                const menu_links = document.querySelectorAll('#table-of-contents .usa-sidenav__item a');
+
+                // functions to add and remove the active class from links as appropriate
+                const makeActive = (link) => menu_links[link].classList.add("usa-current");
+                const removeActive = (link) => menu_links[link].classList.remove("usa-current");
+                const removeAllActive = () => [...Array(sections.length).keys()].forEach((link) => removeActive(link));
+                const sectionMargin = 100;
+
+                let currentActive = 0;
+
+                // listen for scroll events
+                window.addEventListener("scroll", () => {
+
+                    const current = sections.length - [...sections].reverse().findIndex((section) => window.scrollY >= getOffsetTop(section) - sectionMargin ) - 1;
+
+                    if (current !== currentActive) {
+                        removeAllActive();
+                        currentActive = current;
+                        makeActive(current);
+                    }
+                }); // scroll event listener
+            } // end if not on a phone
+        } // end if sections are more than 1
+        else {
+            // If not enough sections for ToC, remove the column and make content area full width
+            document.getElementById('toc-container').parentElement.previousElementSibling.classList.remove('tablet:grid-col-8');
+            document.getElementById('toc-container').parentElement.previousElementSibling.classList.add('tablet:grid-col-12');
+            document.getElementById('toc-container').parentElement.remove();
+        }
+    })();
+</script>

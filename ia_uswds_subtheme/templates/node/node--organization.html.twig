@@ -1,0 +1,211 @@
+{#
+/**
+ * @file
+ * Default theme implementation to display an Organization node.
+ * ----
+ * @author - matthew.coulon@bia.gov, christopherj.allen@bia.gov
+ * ----
+#}
+
+{% extends '/themes/custom/ia_uswds_subtheme/templates/includes/node_layout.html.twig' %}
+{% block body %}
+
+<style>
+    .organization-services .usa-list {
+        padding-left: 0;
+    }
+
+    ul {
+        display: block;
+        list-style-type: none;
+        margin-block-start: 0;
+        margin-block-end: 0;
+        margin-inline-start: 0px;
+        margin-inline-end: 0px;
+        padding-inline-start: 0px;
+    }
+
+    ul, ol {
+        margin: 20px 0;
+        padding: 0;
+    }
+
+    li > ul {
+        margin: 0.4em 0;
+        padding: 0;
+    }
+
+    /* Organization Template Sytles */
+    .org-line {
+        border-left: 1px solid black;
+        height: 20px;
+        margin-left: 4rem;
+    }
+    .organization-about {
+        margin-bottom: 2rem;
+    }
+    .node-type-organization .usa-card__footer a.usa-button,
+    .node-type-organization .usa-card__footer a.usa-button:visited {
+        color: #fff;
+    }
+    #mini-related-org-chart ul {
+        padding-left: 0 !important;
+        list-style-type: none;
+    }
+
+    #mini-related-org-chart > ul li {
+        padding-top: 0;
+        padding-bottom: 0;
+        margin-left: 0;
+    }
+
+    #mini-related-org-chart ul li.org-related-list-item-current {
+        padding-left: 0;
+    }
+
+    ul#org-peer-list {
+        margin-left: 0.4rem;
+    }
+    ul#org-children-list {
+        margin-left: 1.6rem;
+    }
+    
+    ul#org-peer-list > li.org-related-list-item.org-peer-list-item,
+    ul#org-children-list > li.org-related-list-item.org-child-list-item {
+        padding-left: 0;
+        border-left:solid 1px #000;
+    }
+
+    ul#org-peer-list > li.org-related-list-item.org-peer-list-item:last-of-type,
+    ul#org-children-list > li.org-related-list-item.org-child-list-item:last-of-type {
+        border-left: none;
+    }
+
+    ul#org-peer-list > li.org-related-list-item.org-peer-list-item > div.display-flex > div.related-org-tree,
+    ul#org-children-list > li.org-related-list-item.org-child-list-item > div.display-flex > div.related-org-tree {
+        border-bottom:solid 1px #000;
+        width: 9px;
+        height: 0.8rem;
+        margin-right: 0.5rem;
+    }
+
+    ul#org-peer-list > li.org-related-list-item.org-peer-list-item:last-of-type > div.display-flex > div.related-org-tree,
+    ul#org-children-list > li.org-related-list-item.org-child-list-item:last-of-type > div.display-flex > div.related-org-tree {
+        border-left: solid 1px #000;
+        width: 11px;
+    }
+    
+    .org-related-list-item-current span {
+        /* padding-left: 0.25rem; */
+        font-weight: bold;
+    }
+
+    #org-report-to-list li {
+        padding-left: 0!important;
+    }
+
+    #mini-related-org-chart .fa-level-up-alt {
+        margin-right: 0.5rem;
+        line-height: 1.2rem;
+    }
+
+    .node-type-organization ul.usa-card-group {
+        padding-left: 0;
+    }
+
+    @media (min-width: 40em) {
+        .node-type-organization .usa-card--flag .usa-card__media {
+            display: flex;
+            overflow: hidden;
+            bottom: 0;
+            top: 0;
+            left: 0;
+            position: absolute;
+            width: 15rem;
+        }
+
+        .node-type-organization .usa-card--flag .usa-card__body,
+        .node-type-organization .usa-card--flag .usa-card__footer,
+        .node-type-organization .usa-card--flag .usa-card__header {
+            margin-left: 15rem;
+        }
+    }
+</style>
+{# attach_library('core/jquery') #}
+    {% set withouts = ['field_banner_image', 'field_org_organizationtype', 'field_org_leader', 'field_workbench',
+        'field_org_leader', 'field_contact_us', 'field_org_relatedorgs'] %}
+    <div class="grid-row">
+        <div class="grid-col-8">
+            {{ content|without(withouts) }}
+        </div>
+        <div class="grid-col-4">
+            <div class="padding-left-4">
+                {{ content.field_org_leader }}
+            </div>
+        </div>
+    </div>
+    {#  Place these two specific fields here to display side by side; if placed in display group the Contact Us
+    fields will not populate in JSON below #}
+        <div class="grid-row">
+            <div class="desktop:grid-col-5 margin-bottom-4 margin-right-2">{{ content.field_org_relatedorgs }}</div>
+            <div class="grid-col">{{ content.field_contact_us }}</div>
+        </div>
+    </div>
+   
+    
+    <script type="text/javascript">
+        (function() {
+            const relatedParents = document.getElementById('org-report-to-list'),
+                relatedPeers = document.getElementById('org-peer-list'),
+                relatedChildren = document.getElementById('org-children-list');
+
+            if(relatedParents && relatedParents.children.length > 0) {
+                for (let i = 0; i < relatedPeers.children.length; i++) {
+                    relatedPeers.children[i].innerHTML = '<div class="display-flex"><div class="related-org-tree"></div>' + relatedPeers.children[i].innerHTML + '</div>';
+                }
+                relatedParents.lastElementChild.appendChild(relatedPeers);
+            }
+
+            if(relatedChildren && relatedChildren.children.length > 0) {
+                for (let j = 0; j < relatedChildren.children.length; j++) {
+                    relatedChildren.children[j].innerHTML = '<div class="display-flex"><div class="related-org-tree"></div>' + relatedChildren.children[j].innerHTML + '</div>';
+                }
+                document.getElementsByClassName('org-related-list-item-current')[0].appendChild(relatedChildren);
+            }
+        })();
+    </script>
+{% endblock  %}
+
+{% block schema %}
+    <!-- JSON Info below -->
+    <script type="application/ld+json">
+        {
+            "@context": "https://schema.org/",
+            "@id": "{{ node.label|e }}/#governmentOrganization",
+            "@type": "governmentOrganization",
+            "name": "{{ node.label|e }}",
+            "memberOf": {
+                "@id": "https://www.bia.gov/#organization"
+            },
+            "description": "{{ content.field_org_shortdescription.0 }}",
+            "url": "https://www.bia.gov{{ url }}",
+            "address": {
+                "@type": "PostalAddress",
+                "addressLocality": "{{ content.field_contact_us.0['#paragraph'].field_tld_state.0.value }}",
+                "addressRegion": "{{ content.field_contact_us.0['#paragraph'].field_contactus_city.0.value|spaceless|e  }}",
+                "postalCode": "{{ content.field_contact_us.0['#paragraph'].field_contactus_zip.0.value|spaceless|e }}",
+                "streetAddress": "{{ content.field_contact_us.0['#paragraph'].field_contactus_address.0.value|spaceless|e  }}"
+            },
+            "contactPoint": [{
+                "@type": "ContactPoint",
+                "telephone": "{{ content.field_contact_us.0['#paragraph'].field_contactus_phone.0.value|spaceless|e   }}",
+                "email:": "{{ content.field_contact_us.0['#paragraph'].field_contactus_email.0.value|spaceless|e  }}",
+                "faxNumber:": "{{ content.field_contact_us.0['#paragraph'].field_fax.0.value|spaceless|e  }}",
+                "contactType": "government service"
+            }]
+        }
+    </script>
+{% endblock schema %}
+
+
+

@@ -1,0 +1,18 @@
+{%
+    set classes = [
+    'paragraph',
+    'paragraph--type--' ~ paragraph.bundle|clean_class,
+    view_mode ? 'paragraph--view-mode--' ~ view_mode|clean_class,
+    not paragraph.isPublished() ? 'paragraph--unpublished'
+]
+%}
+
+{% block paragraph %}
+    {% block content %}
+        <div {{ attributes.addClass(classes) }}>
+            <ul class="usa-card-group">
+                {{ content.field_card_item }}
+            </ul>
+        </div>
+    {% endblock %}
+{% endblock paragraph %}

@@ -1,0 +1,28 @@
+{#
+/**
+ * @file
+ * Theme override for:
+ * Node Type = Tribal Consultations
+ * Field = 	Invitation (field_tc_invitation)
+ */
+#}
+{%
+    set title_classes = [
+    label_display == 'visually_hidden' ? 'usa-sr-only'
+]
+%}
+<div class="grid-col-12">
+    {% if label_hidden==false %}
+        <h2 class="call-out" {{ title_attributes.addClass(title_classes)}}>{{ label }}</h2>
+    {% endif %}
+    
+    <div class="grid-col-12 clear">
+        <div class="grid-row grid-gap-2">
+            {% for item in items %}
+                <div class="tablet:grid-col-4 blue-rounded-cards">
+                    {{ item.content }}
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>

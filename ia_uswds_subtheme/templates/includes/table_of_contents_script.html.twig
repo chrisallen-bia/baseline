@@ -1,0 +1,172 @@
+<script type="text/javascript">
+    (function() {
+
+        const sectionHeaders = document.querySelectorAll("article h2:not(.usa-sr-only), article h3:not(.usa-sr-only)");
+
+        if(sectionHeaders && sectionHeaders.length > 1) {
+            // Set up the page layout to have the 'sidebar' for the toc
+            document.getElementById('ia-main-content').classList.add('tablet:grid-col-9');
+
+            // Add the ToC container to the page
+            const toc_grid_col = document.createElement('DIV');
+                toc_grid_col.classList.add('grid-col-12', 'tablet:grid-col-3');
+
+            const toc_container = document.createElement('DIV');
+                toc_container.id = 'toc-container';
+                toc_container.classList.add('margin-y-2');
+
+            const toc_title = document.createElement('DIV');
+                toc_title.innerText = 'Contents';
+                toc_title.classList.add('text-bold', 'margin-bottom-1');
+
+            const toc_element = document.createElement('UL');
+                toc_element.id = "table-of-contents";
+                toc_element.classList.add('usa-sidenav');
+
+            // Append all the children
+            toc_container.appendChild(toc_title);
+            toc_container.appendChild(toc_element);
+            toc_grid_col.appendChild(toc_container);
+            document.getElementById('ia-main-content').parentElement.appendChild(toc_grid_col);
+
+            let lastHeaderType = '';
+
+            for (let j = 0; j < sectionHeaders.length; j++){
+
+                if(sectionHeaders[j].nodeName == 'H2' && j < sectionHeaders.length) {
+                    let list_item = document.createElement("LI");
+                        list_item.classList.add('usa-sidenav__item', 'ia-toc-toplevel');
+
+                    let anchor = document.createElement("A");
+                        anchor.setAttribute('href', '#'+sectionHeaders[j].id);
+                        anchor.innerText = sectionHeaders[j].innerText;
+
+                    // If ignore-toc-active, add the class to the link in the toc
+                    if(sectionHeaders[j].classList.contains('ignore-toc-active')) {
+                        anchor.classList.add('ignore-toc-active');
+                    }
+
+                    list_item.appendChild(anchor);
+                    toc_element.appendChild(list_item);
+
+
+                }
+
+                if(sectionHeaders[j].nodeName == 'H3'  && j < sectionHeaders.length) {
+                    // If this is the last header type was h2, and we are now in a new h3,
+                    // we are now creating a sublist
+
+
+                    let list_item = document.createElement("LI");
+                        list_item.classList.add('usa-sidenav__item');
+
+                    let anchor = document.createElement('A');
+                        anchor.innerText = sectionHeaders[j].innerText;
+                        anchor.setAttribute('href', '#'+sectionHeaders[j].id);
+
+                    // If ignore-toc-active, add the class to the link in the toc
+                    if(sectionHeaders[j].classList.contains('ignore-toc-active')) {
+                        anchor.classList.add('ignore-toc-active');
+                    }
+
+                    // Add an event handler to open an accordion if the linked toc item is clicked
+                    if(sectionHeaders[j].classList.contains('usa-accordion__heading')){
+                        // Set the ID using the content id
+                        //anchor.setAttribute('href', '#'+sectionHeaders[j].nextElementSibling.id);
+
+                        anchor.addEventListener("click", function(){
+                            // Close all other accordion items
+                            let accordion_buttons = sectionHeaders[j].parentElement.querySelectorAll('.usa-accordion__button');
+                            for(let k=0; k<accordion_buttons.length; k++){
+                                accordion_buttons[k].ariaExpanded = false;
+                                accordion_buttons[k].parentElement.nextElementSibling.hidden = true;
+                            }
+
+                            // Expand the h3 synced to this toc list item
+                            sectionHeaders[j].querySelectorAll('.usa-accordion__button')[0].ariaExpanded = true;
+                            sectionHeaders[j].nextElementSibling.hidden = false;
+                        });
+
+
+                    } else {
+                        anchor.setAttribute('href', '#'+sectionHeaders[j].id);
+                    }
+
+                    list_item.appendChild(anchor);
+
+                    if(lastHeaderType == 'H2'){
+                        let unordered_list = document.createElement('UL');
+                            unordered_list.classList.add('usa-sidenav__sublist');
+
+                        unordered_list.appendChild(list_item);
+                        toc_element.lastElementChild.appendChild(unordered_list);
+                    }
+                    // If we are in an H3 and the last element was an H3, we are still in the same sublist
+                    else if(lastHeaderType == 'H3') {
+                        toc_element.lastElementChild.querySelectorAll('.usa-sidenav__sublist')[0].appendChild(list_item);
+                    }
+
+                }
+
+                lastHeaderType = sectionHeaders[j].nodeName;
+            }
+
+
+            //If not on a phone
+            if (!(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent))) {
+                //document.getElementById('toc-container').classList.add('position-sticky', 'top-1');
+                toc_container.classList.add('position-sticky', 'top-1');
+
+                // Necessary to get the correct top of each section, offsetTop is not sufficient in and of itself
+                const getOffsetTop = element => {
+                    let offsetTop = 0;
+                    while(element) {
+                        offsetTop += element.offsetTop;
+                        element = element.offsetParent;
+                    }
+                    return offsetTop;
+                }
+
+                // grab the sections (targets) and menu_links (triggers)
+                // for menu items to apply active link styles to
+                const menu_links = document.querySelectorAll('#table-of-contents .usa-sidenav__item a');
+                //const menu_links = document.querySelectorAll('#table-of-contents .ia-toc-toplevel>a');
+
+                // functions to add and remove the active class from links as appropriate
+                const makeActive = (link) => {
+                    // If the second-level link wants to have the active class ignored, example a three column layout of headers,
+                    // add the current class to the parent section, otherwise add it as usual
+                    if(menu_links[link].classList.contains('ignore-toc-active') &&
+                        menu_links[link].parentElement.parentElement.parentElement.classList.contains('ia-toc-toplevel')) {
+                            menu_links[link].parentElement.parentElement.parentElement.firstElementChild.classList.add("usa-current");
+                    }
+                    else {
+                        menu_links[link].classList.add("usa-current");
+                    }
+                }
+                const removeActive = (link) => menu_links[link].classList.remove("usa-current");
+                const removeAllActive = () => [...Array(sectionHeaders.length).keys()].forEach((link) => removeActive(link));
+                const sectionMargin = 10;
+
+                let currentActive = 0;
+
+                // listen for scroll events
+                window.addEventListener("scroll", () => {
+
+                    const current = sectionHeaders.length - [...sectionHeaders].reverse().findIndex((sectionHeader) => window.scrollY >= getOffsetTop(sectionHeader) - sectionMargin ) - 1;
+
+                    if (current !== currentActive) {
+                        removeAllActive();
+                        currentActive = current;
+                        makeActive(current);
+                    }
+                }); // scroll event listener
+            } // end if not on a phone
+        } // end if sections are more than 1
+        else {
+            // If not enough sections for ToC, remove the column and make content area full width
+            document.getElementById('ia-main-content').classList.remove('tablet:grid-col-9');
+            document.getElementById('ia-main-content').classList.add('tablet:grid-col-12');
+        }
+    })();
+</script>

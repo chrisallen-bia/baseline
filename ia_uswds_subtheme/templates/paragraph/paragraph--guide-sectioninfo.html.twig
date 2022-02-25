@@ -1,0 +1,29 @@
+{%
+	set classes = [
+	'paragraph',
+	'paragraph--type--' ~ paragraph.bundle|clean_class,
+	view_mode ? 'paragraph--view-mode--' ~ view_mode|clean_class,
+	not paragraph.isPublished() ? 'paragraph--unpublished',
+	'margin-y-4',
+	'desktop:margin-y-6'
+]
+%}
+
+{%
+	set title_classes = [
+	'call-out'
+]
+%}
+
+{% block paragraph %}
+	<section{{ attributes.addClass(classes) }}>
+		{% if content.field_guide_sec_title.0 is not empty %}
+			{% set header_id = content.	field_guide_sec_title.0['#context'].value|clean_id %}
+			<h2{{ title_attributes.addClass(title_classes).setAttribute('id', header_id) }}>{{ content.field_guide_sec_title.0['#context'].value }}</h2>
+		{% endif %}
+
+		{% set withouts = ['field_guide_sec_title'] %}
+
+		{{ content|without(withouts) }}
+	</section>
+{% endblock paragraph %}

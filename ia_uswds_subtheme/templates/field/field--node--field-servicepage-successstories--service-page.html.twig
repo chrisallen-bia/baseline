@@ -1,0 +1,23 @@
+{#
+/**
+ * @file
+ * Theme override for:
+ * Node Type = Tribal Consultations
+ * Field = 	Sessions (field_tc_sessions)
+ */
+#}
+{%
+	set title_classes = [
+	label_display == 'visually_hidden' ? 'usa-sr-only'
+]
+%}
+
+{% if label_hidden==false %}
+	<h2 class="call-out" {{ title_attributes.addClass(title_classes)}}>{{ label }}</h2>
+{% endif %}
+
+<ul class="usa-card-group slider">
+	{% for item in items %}
+		{{ item.content }}
+	{% endfor %}
+</ul>

@@ -1,0 +1,20 @@
+{#
+/**
+ * @file
+ * Theme override for:
+ * Node Type = Tribal Consultations
+ * Field = 	Other Resources (field_servicepage_otherresource)
+ */
+#}
+
+<div class="grid-col-12 desktop:grid-col-5 margin-bottom-4">
+	{% if not label_hidden %}
+		{% set header_id = label|clean_id %}
+		<h3{{ title_attributes.addClass(title_classes).setAttribute('id', header_id) }}>{{ label }}</h3>
+	{% endif %}
+    <ul>
+		{% for item in items %}
+	        <li>{{ item.content }}</li>
+	    {% endfor %}
+    </ul>
+</div>

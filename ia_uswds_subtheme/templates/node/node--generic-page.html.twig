@@ -1,0 +1,40 @@
+{#
+/**
+ * @file
+ * Default theme implementation to display a 'Generic Page' node.
+ * ----
+ * @author - chad.thoreson@bia.gov
+ * ----
+#}
+
+{%
+    set classes = [
+    'grid-container'
+]
+%}
+
+{% set content_id = 'ia-main-content' %}
+
+<article{{ attributes.addClass(classes)}}>
+
+    {{ title_prefix }}
+    <div class="grid-row grid-gap">
+        <div{{ content_attributes.setAttribute('id', content_id) }} class="grid-col-fill">
+            {% set withouts = ['field_hero', 'field_relative_services_org'] %}
+
+            {# Content #}
+            {{ content|without(withouts) }}
+
+        </div>
+    </div>
+
+{#  schema.org information #}
+    <script type="application/ld+json">
+        {
+            "@context": "schema.org",
+            "@type": "WebPage",
+            "name": "{{ node.label|e }}",
+            "description": "{{ content.field_hero.0['#paragraph'].field_infosec_subtitle.value }}"
+        }
+    </script>
+</article>

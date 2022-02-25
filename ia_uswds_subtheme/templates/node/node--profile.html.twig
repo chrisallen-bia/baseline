@@ -1,0 +1,38 @@
+{#
+/**
+ * @file
+ * Default theme implementation to display a 'Profile' node.
+ * ----
+ * @author - christopherj.allen@bia.gov
+ * ----
+#}
+
+{% extends '/themes/custom/ia_uswds_subtheme/templates/includes/node_layout.html.twig' %}
+{% block body %}
+	<style>
+        .profile-photo img {
+            width:100%;
+            height:auto;
+        }
+	</style>
+	
+{%  set withouts = ['field_profile_photo' ] %}
+	<!-- If Profile has an image, use this -->
+	{%  if content.field_profile_photo %}
+	<div class="grid-row grid-gap">
+		<div class="tablet:grid-col-3 margin-top-205 profile-photo">
+			{{ content.field_profile_photo }}
+		</div>
+		<div class="tablet:grid-col-9">
+			{{  content|without(withouts) }}
+		</div>
+	</div>
+	{% else %}
+	<!-- If no images on content, use the following (full width body) -->
+	<div class="grid-container">
+		<div class="tablet:grid-col-12">
+			{{  content|without(withouts) }}
+		</div>
+	</div>
+	{% endif %}
+{% endblock  %}

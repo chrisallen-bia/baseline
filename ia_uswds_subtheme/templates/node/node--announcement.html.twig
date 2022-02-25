@@ -1,0 +1,35 @@
+{#
+/**
+ * @file
+ * Default theme implementation to display an 'Announcement' node.
+ * ----
+ * @author - chad.thoreson@bia.gov
+ * ----
+#}
+{% extends '/themes/custom/ia_uswds_subtheme/templates/includes/node_layout.html.twig' %}
+{% block body %}
+    <div class="content"{{ content_attributes }}>
+        {{ content|without('comments', 'links') }}
+    </div>
+
+    {{ content.links }}
+    {{ content.comments }}
+{% endblock body %}
+
+{% block schema %}
+{% set posted_date = node.field__announcement_dateposted.0.value ? node.field__announcement_dateposted.0.value|date('U')|format_date('custom', 'M d, Y') : '' %}
+{% set expired_date = node.field_announcement_expires.0.value ? node.field_announcement_expires.0.value|date('U')|format_date('custom', 'M d, Y') : '' %}
+
+<script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "SpecialAnnouncement",
+        "name": "{{ node.label }}",
+        "text": "{{ node.body.0.value|striptags }}",
+        "datePosted": "{{ posted_date }}",
+        "expires": "{{ expired_date }}",
+        "url": "{{ url('<current>') }}",
+        "category": "{{ node.field_announcement_category[0]['value'] }}"
+    }
+</script>
+{% endblock schema %}

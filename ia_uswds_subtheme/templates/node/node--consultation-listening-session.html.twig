@@ -1,0 +1,105 @@
+{#
+/**
+ * @file
+ * Default theme implementation to display a node of type 'Consultation / Listening Session'.
+ * @author christopherj.allen@bia.gov
+
+#}
+{% extends '/themes/custom/ia_uswds_subtheme/templates/includes/node_layout.html.twig' %}
+{% block body %}
+            <style>
+                .usa-collection__body{
+                    margin-top: -1rem;
+                    margin-left: 1rem;
+                    margin-right: 1rem;
+                }
+                .usa-collection__calendar-date{
+                    height:120px;
+                }
+                .cls-time-zone {
+                    width: 5em;
+                    position: absolute;
+                    top: 160px;
+                }
+                /*.node-consultation-listening-session .usa-collection__item{
+                    border-top:none;
+                    max-width:100%!important;
+                }*/
+            </style>
+    
+   
+    {% set date_month = node.field_event_dates.0.value ? node.field_event_dates.0.value|date('U')|format_date('custom', 'M') : '' %}
+    {% set date_day = node.field_event_dates.0.value ? node.field_event_dates.0.value|date('U')|format_date('custom', 'd') : '' %}
+    {% set date_year = node.field_event_dates.0.value ? node.field_event_dates.0.value|date('U')|format_date('custom', 'Y') : '' %}
+    
+    <div class="grid-row grid-gap-2">
+            <div class="tablet:grid-col-9">
+                {% if content.field_event_dates %}
+                <ul class="usa-collection">
+                    <li class="usa-collection__item">
+                        <div class="usa-collection__calendar-date">
+                            <time>
+                                <span class="usa-collection__calendar-date-month">
+                                    {{ date_month }}
+                                </span>
+                                <span class="usa-collection__calendar-date-day">
+                                    {{ date_day }}
+                                </span>
+                                <span class="usa-collection__calendar-date-day border-top-1px">
+                                    {{ date_year }}
+                                </span>
+                            </time>
+                        </div>
+                        {% if content.field_serviceevent_timezone %}
+                            <div class="cls-time-zone">
+                                {{ content.field_event_dates }}
+                                {{ content.field_serviceevent_timezone }}
+                            </div>
+                        {% endif %}
+
+                        <div class="usa-collection__body">
+                            {% if content.body %}
+                                {{ content.body }}
+                            {% endif %}
+                            {% if content.field_address %}
+                                {{ content.field_address }}
+                            {% endif %}
+                            {% if content.field_consultation_call_in %}
+                                {{ content.field_consultation_call_in }}
+                            {% endif %}
+                            {% if content.field_consultation_passcode %}
+                                {{ content.field_consultation_passcode }}
+                            {% endif %}
+                        </div>
+                    </li>
+                </ul>
+                {% endif %}
+            </div><!-- /tablet:grid-col-12 padding-right-2 -->
+            <div class="tablet:grid-col-3">
+            <!-- Adds Right side contextual View/Block (filter by month) -->
+                <h3>Monthly</h3>
+                    {{ drupal_block('views_block:upcoming_consultation_2021_reference-block_1') }}
+            </div><!-- /tablet:grid-col-3 -->
+
+        </div><!-- /grid-row -->
+{% endblock  %}
+
+{% block schema %}
+    <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "Event",
+            "name": "{{ node.label|e }}",
+            "startDate": "{{ node.field_event_dates.0.value|striptags }}",
+            "endDate": "{{ node.field_event_dates2.0.value|striptags }}",
+            "eventAttendanceMode": "{{  node.field_serviceevent_attendingmode.0.value  }}",
+            "eventStatus": "https://schema.org/EventScheduled",
+            "description": "{{ node.body.0.value|striptags }}",
+            "organizer": {
+                "@type": "Organization",
+                "name": "Bureau of Indian Affairs",
+                "url": "https://www.bia.gov"
+            }
+        }
+    </script>
+{% endblock schema %}

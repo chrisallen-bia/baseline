@@ -1,0 +1,48 @@
+{#
+/**
+ * @file
+ * Default theme implementation to display a 'Documentation Detail' node.
+ * ----
+ * @author - matthew.coulon@bia.gov
+ * ----
+#}
+
+<style>
+    .ia-section-title h2 {
+        color: #fff !important;
+        display: block;
+        font-size: 1.5em !important;
+        margin-block-start: 0.83em !important;
+        margin-block-end: 0.83em !important;
+        margin-inline-start: 0px !important;
+        margin-inline-end: 0px !important;
+        font-weight: bold !important;
+        padding: 0 !important;
+    }
+</style>
+
+{%
+    set classes = [
+    'grid-container'
+]
+%}
+
+{% set content_id = 'ia-main-content' %}
+
+<article{{ attributes.addClass(classes)}}>
+
+    {{ title_prefix }}
+
+    <div class="grid-row grid-gap">
+        <div{{ content_attributes.setAttribute('id', content_id) }} class="grid-col-12">
+            {% set withouts = ['field_hero', 'field_relative_services_org'] %}
+
+            {# Content #}
+            {{ content|without(withouts) }}
+
+        </div>
+    </div>
+
+    {{ include('/themes/custom/ia_uswds_subtheme/templates/includes/table_of_contents_script.html.twig') }}
+
+</article>

@@ -1,0 +1,35 @@
+{#
+/**
+ * @file
+ * Default theme implementation to display a 'Documentation Detail' node in Entity Reference Embed Display Mode.
+ * 
+ * @author - matthew.coulon@bia.gov
+ *
+#}
+
+{%
+    set classes = [
+    'ia-include-content',
+    'margin-top-2',
+    'margin-bottom-5'
+]
+%}
+
+{#<article{{ attributes.addClass(classes)}}>#}
+
+    {{ title_prefix }}
+<div{{ attributes.addClass(classes) }}>
+
+    <h3>{{ label }}</h3>
+    <div class="grid-col-fill">
+        {% set withouts = [] %}
+
+        {# Content #}
+        {{ content|without(withouts) }}
+
+        <a href="{{ url }}" class="usa-button usa-button--outline margin-top-3">Learn more</a>
+
+    </div>
+</div>
+
+{#</article>#}

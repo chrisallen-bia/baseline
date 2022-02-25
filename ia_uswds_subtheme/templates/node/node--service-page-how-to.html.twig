@@ -1,0 +1,99 @@
+{#
+/**
+ * @file
+ * Default theme implementation to display a 'Service Page How To' node.
+ * ----
+ * @author - matthew.coulon@bia.gov
+#}
+
+{% extends '/themes/custom/ia_uswds_subtheme/templates/includes/node_layout.html.twig' %}
+
+{% block body %}
+    <style>
+        #how-to-methods h3 {
+            margin-top: 30px;
+        }
+    </style>
+
+    {% set withouts = ['field_service_relatedservice', 'group_how_to.field_showto_actionverb', 'field_workbench', 'field_showto_downloadlink', 'field_contact_us'] %}
+
+    {# Content
+    {{ content|without(withouts) }}#}
+
+    {# SHORT DESCRIPTION #}
+    {{ content.field_metadata }}
+
+    {# Time Callout #}
+    {{ content.field_showto_timecallout }}
+
+    {# Quick Actions #}
+    {{ content.field_showto_action }}
+
+    {# What You Need #}
+    {{ content.field_showto_whatyouneed }}
+
+    {# Fees #}
+    {{ content.field_showto_fees }}
+
+    {# How To #}
+    <section id="how-to-methods" class="margin-y-4">
+        {% set howto_title = 'How to ' ~ content.field_showto_actionverb.0['#markup'] %}
+        {% set howto_header_id = howto_title|clean_id %}
+        <h2 id="{{ howto_header_id }}" class="call-out">{{ howto_title }}</h2>
+
+        {{ content.field_showto_howtoapply }}
+    </section>
+
+    {# Block Reference #}
+    {{ content.field_block_reference }}
+
+    {# Next steps #}
+    {{ content.field_showto_next_steps }}
+
+    {# Related Documents and Contact Us #}
+    <section id="related-docs-and-contact" class="margin-top-4 desktop:margin-top-8">
+        <h2 id="additional-information" class="call-out">Additional Information</h2>
+        {# Additional Information #}
+        {{ content.field_showto_additionalinfo }}
+
+        <br />
+        <div class="grid-row">
+            <div class="tablet:grid-col-4 desktop:grid-col-5 margin-y-4 desktop:margin-y-0 padding-2">
+                {% if content.field_showto_downloadlink %}
+                    {{ content.field_showto_downloadlink }}
+                {% endif %}
+            </div><!-- /.tablet:grid-col-5 padding-2 -->
+            <div class="tablet:grid-col">
+                {% if content.field_contact_us %}
+                    {{ content.field_contact_us }}
+                {% endif %}
+            </div>
+        </div>
+    </section>
+    {# END Related Documents and Contact Us #}
+{% endblock body  %}
+
+{% block schema %}
+    {# JSON Info below temp #}
+    <script type='application/ld+json'>
+        {
+            "@context": "http://schema.org",
+            "@graph": [
+                {
+                    "@type": "ApplyAction",
+                    "name": "{{ node.label|e }}",
+                    "description": "{{ content.field_metadata.0['#paragraph'].field_short_description.0.value|spaceless|e }}",
+                    "instrument": "{{ schema_org_instruments|spaceless|e }}",
+                    "target": [
+                        {%- for item in content.field_showto_action['#items'] -%}
+                            {% if loop.last %}
+                                { "@type": "Service", "name": "{{ item.title|e }}", "url": "{{ item.uri|e }}" }
+                            {% else %}
+                                { "@type": "Service", "name": "{{ item.title|e }}", "url": "{{ item.uri|e }}" },
+                            {% endif %}
+                        {%- endfor -%}
+                    ]
+                }]
+        }
+    </script>
+{% endblock schema %}

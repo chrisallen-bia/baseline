@@ -1,0 +1,75 @@
+{#
+/**
+ * @file
+ * Default theme implementation to display an 'Information Detail' node.
+ * ----
+ * @author - matthew.coulon@bia.gov
+ * ----
+#}
+
+{% extends '/themes/custom/ia_uswds_subtheme/templates/includes/node_layout.html.twig' %}
+
+{% block body %}
+    {# Short Description - Use content.field_metadata to render short description. This will use paragraph--metadata.html, which
+      only renders short description and ignores all other fields of metadata. The other fields are rendered in the hero
+    #}
+        {% if content.field_metadata.0['#paragraph'].field_short_description.0.value %}
+            <section id="short-description" class="margin-y-4">
+                <div class="short-desc">
+                    {{ content.field_metadata }}
+                </div>
+            </section>
+        {% endif %}
+    {# END Short Description #}
+
+    {# Video #}
+        {% if content.field_infodetail_infovideo %}
+            {{ content.field_infodetail_infovideo }}
+        {% endif %}
+    {# END Video #}
+
+    {# Sections #}
+        {% if content.field_infodetail_infosec %}
+            {{ content.field_infodetail_infosec }}
+        {% endif %}
+    {# END Sections #}
+
+    {# Related Documents and Contact Us #}
+        <section id="related-docs-and-contact" class="margin-top-4 desktop:margin-top-8">
+            <h2 id="additional-information" class="call-out">Additional Information</h2>
+
+            <div class="grid-row">
+                <div class="tablet:grid-col-4 desktop:grid-col-5 margin-y-4 desktop:margin-y-0 padding-2">
+                    {% if content.field_infodetail_doc %}
+                        {{ content.field_infodetail_doc }}
+                    {% endif %}
+
+                    {% if content.field_infodetail_doc and content.field_infodetail_page %}
+                        <br />
+                    {% endif %}
+
+                    {% if content.field_infodetail_page %}
+                        {{ content.field_infodetail_page }}
+                    {% endif %}
+                </div><!-- /.tablet:grid-col-5 padding-2 -->
+                <div class="tablet:grid-col">
+                    {% if content.field_contact_us %}
+                        {{ content.field_contact_us }}
+                    {% endif %}
+                </div>
+            </div>
+        </section>
+    {# END Related Documents and Contact Us #}
+{% endblock body  %}
+
+{% block schema %}
+    {# JSON Info below #}
+    <script type="application/ld+json">
+        {
+            "@context": "schema.org",
+            "@type": "WebPage",
+            "name": "{{ node.label|e }}",
+            "description": "{{ content.field_metadata.0['#paragraph'].field_short_description.0.value|spaceless|e }}"
+        }
+    </script>
+{% endblock schema %}

@@ -1,0 +1,16 @@
+{#
+/**
+ * @file
+ * Default theme implementation to display custom classes around
+ * Node Type: Organization
+ * Field: field_contact_us (paragraph)
+ * ----
+ * @author - christopherj.allen@bia.gov
+ * ----
+#}
+
+<div class="grid-col-12 desktop:grid-col-7 margin-bottom-4">
+	{% for item in items %}
+		{{ item.content }}
+	{% endfor %}
+</div>

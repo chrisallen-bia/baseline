@@ -1,0 +1,65 @@
+{#
+/**
+ * @file
+ * Default theme implementation to display a 'Success Story' node.
+ * ----
+ * @author - christopherj.allen@bia.gov
+ * ----
+#}
+
+<style>
+    .grid-col-8 img{
+        margin: 0 1em;
+    }
+</style>
+{%
+    set classes = [
+    'grid-container success-story',
+    'grid-row'
+    ]
+%}
+
+<article{{ attributes.addClass(classes)}}>
+    <div class="tablet:grid-col-12 margin-top-2 padding-right-4 border-bottom-1px padding-bottom-2 margin-bottom-2" >
+        {# background #}
+        {% if content.field_successstories_background %}
+           <h3>Background</h3>
+            {{ content.field_successstories_background	}}
+        {% endif %}
+
+        {# result #}
+        {% if content.field_successstories_result %}
+            <h3>Result</h3>
+        {{ content.field_successstories_result	}}
+    {% endif %}
+    </div><!-- /tablet:grid-col-12-->
+
+    <div class="tablet:grid-col-4 margin-top-2 padding-right-4">
+        {% if content.field_newssimage %}
+            <div class="responsive-image-news">
+                {{ content.field_newssimage }}
+            </div>
+            <span class="text-italic">{{ content.field_newsimage.title }}</span>
+        {% endif %}
+    </div><!-- /tablet:grid-col-4-->
+
+    <div class="tablet:grid-col-8 margin-top-2 ">
+        {% if content.field_infodesc_sectiondetail %}
+            {{ content.field_infodesc_sectiondetail }}
+        {% endif %}
+    </div><!-- /tablet:grid-col-8-->
+
+    {# Contact Us Card #}
+    <div class="tablet:grid-col-12 margin-top-2 padding-right-4 border-top-1px">
+        <section id="service-page-bottom" class="margin-y-4">
+            <div class="grid-row margin-top-2">
+                {% if content.field_contact_us %}
+                    <div class="grid-col-12 tablet:grid-col">
+                        {{ content.field_contact_us }}
+                    </div>
+                {% endif %}
+            </div>
+        </section>
+    </div>
+
+</article>

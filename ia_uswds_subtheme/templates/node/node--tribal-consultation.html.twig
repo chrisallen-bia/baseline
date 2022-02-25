@@ -1,0 +1,57 @@
+{#
+/**
+ * @file
+ * Default theme implementation to display a 'Tribal Consultation' node.
+ * ----
+ * @author - christopherj.allen@bia.gov
+ * ----
+#}
+{% extends '/themes/custom/ia_uswds_subtheme/templates/includes/node_layout.html.twig' %}
+{% block body %}
+    {%  set withouts = ['field_tc_sessions', ' field_servicepage_servicelink' ] %}
+
+    <div class="grid-row grid-gap">
+        <div class="grid-col-12">
+            {#  content|without(withouts) #}
+            {{ content }}
+        </div>
+    </div>
+{% endblock  %}
+
+{% block schema %}
+    <!-- JSON Info below -->
+    {% set base_url = url('<front>')|render|split('/', -1)|join('/') %}
+    <script type='application/ld+json'>
+        {
+            "@context": "https://schema.org",
+            "@type": "InviteAction",
+            "agent": {
+                    "@type": "Organization",
+                    "name": "{{ content.metadata.0['#paragraph'].field_servicepage_providedby.0.title }}",
+                    "url": "{{ content.metadata.0['#paragraph'].field_servicepage_providedby.0.url }}"
+                },
+            "about": "{{ node.label|e }}",
+            "event": [{
+                    "@context": "https://schema.org",
+                    "@type": "Event",
+                          {% for item in content.field_tc_sessions['#items'] %}
+                          {
+                            "name": "{{ item.entity.field_tc_sessiontitle.value }}",
+                            "startDate": "{{ item.entity.field_startenddate.entity.field_startenddate_start.value }}",
+                            "endDate": "{{ item.entity.field_startenddate.entity.field_startenddate_end.value }}",
+                            "description": "{% for item in content.field_metadata['#items'] %}{{ item.entity.field_short_description.value|striptags|e  }}{% endfor %}",
+                            "organizer": {
+                                "@type": "Organization",
+                                "name": "{{ node.label }}",
+                                "url": "{% for item in content.field_metadata['#items'] %}{{ base_url }}{{ item.entity.field_servicepage_providedby.0.url }}{% endfor %}"
+                                },
+                            "eventAttendanceMode": "https://schema.org/{{ content.field_serviceevent_attendingmode }}",
+                            "eventStatus": "https://schema.org/EventScheduled",
+                            "location": "{{ item.entity.field_serviceevent_physicalloc.value }} {{ item.entity.field_tc_virtuallocation.0.url  }}"
+                        }
+                    {% endfor %}
+                }]
+    </script>
+{% endblock schema %}
+
+

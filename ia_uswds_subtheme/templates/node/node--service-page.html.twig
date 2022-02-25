@@ -1,0 +1,94 @@
+{#
+/**
+ * @file
+ * Default theme implementation to display an 'Service Page' node.
+ * ----
+ * @author - fermin.aguilar@bia.gov
+ * ----
+#}
+
+{% extends '/themes/custom/ia_uswds_subtheme/templates/includes/node_layout.html.twig' %}
+
+{% block body %}
+<link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css"/>
+<style>
+    .ia-action-link {
+        font-size: 1.13rem;
+        font-weight: normal !important;
+        line-height: 1.2;
+        justify-content: center;
+        background: transparent;
+        border: 2px solid;
+        border-color: #73b3e7;
+        border-radius: .5rem;
+        box-shadow: 0 0.25rem 0.5rem 0 rgb(0 0 0 / 10%);
+        padding: 1rem 2rem;
+        display: flex;
+        align-items: center;
+        height: 95%;
+    }
+
+    .ia-action-link:hover {
+        box-shadow: 0 0.25rem 0.5rem 0 rgb(0 0 0 / 10%);
+        border-bottom: 2px solid;
+        border-color: #73b3e7;
+    }
+</style>
+
+{# Control the order in Manage Display #}
+<div class="grid-row grid-gap">
+    <div class="grid-col-12">
+        {% set withouts = ['field_hero', 'field_servicepage_servicetype', 'field_relative_topic_org', 'field_servicepage_topic', 'field_workbench'] %}
+
+        {{ content|without(withouts) }}
+    </div>
+</div>
+{% endblock body  %}
+
+{% block schema %}
+    {# JSON Info below temp #}
+
+    {# build one array that top tasks and all other tasks will be merged into. Use the merged array for potential actions #}
+    {% set all_tasks_for_schema = [] %}
+
+    {% if content.group_servicepage_whattodo.field_servicepage_toptasks['#items'] %}
+        {% set all_tasks_for_schema = all_tasks_for_schema|merge(content.group_servicepage_whattodo.field_servicepage_toptasks['#items']) %}
+    {% endif %}
+
+    {% if content.group_servicepage_whattodo.field_servicepage_allothertasks['#items'] %}
+        {% set all_tasks_for_schema = all_tasks_for_schema|merge(content.group_servicepage_whattodo.field_servicepage_allothertasks['#items']) %}
+    {% endif %}
+
+    <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "GovernmentService",
+            "name": "{{ node.label|e }}",
+            "serviceType": "{{ content.field_servicepage_servicetype.0 }}",
+            "description": "{{ content.field_metadata.0['#paragraph'].field_short_description.0.value|spaceless|e }}",
+            "serviceOperator": {
+                "@type": "GovernmentOrganization",
+                "name": "Indian Affairs, {{ content.field_metadata.0['#paragraph'].field_servicepage_providedby.0.title|spaceless|e }}"
+            },
+            "areaServed": {
+                "@type": "Country",
+                "name": "United States"
+            },
+            "audience": {
+                "@type": "Audience",
+                "name": "The American Indians and Alaskan Native"
+            },
+            "potentialAction": [
+                {%- for item in all_tasks_for_schema -%}
+                    {% if loop.last %}
+                      { "@type": "Action", "name": "{{ item.title|e }}", "url": "{{ item.url.toString() }}" }
+                    {% else %}
+                      { "@type": "Action", "name": "{{ item.title|e }}", "url": "{{ item.url.toString() }}" },
+                    {% endif %}
+                {%- endfor -%}
+            ]
+      }
+    </script>
+    
+{% endblock schema %}

@@ -1,0 +1,89 @@
+{#
+/**
+ * @file
+ * Default theme implementation to display a 'Service Detail' node.
+ * ----
+ * @author - matthew.coulon@bia.gov
+ * ----
+#}
+{% extends '/themes/custom/ia_uswds_subtheme/templates/includes/node_layout.html.twig' %}
+
+{% block body %}
+    {% set withouts = ['field_service_relatedservice', 'field_servicepage_servicetype', 'field_workbench', 'field_servicedetail_relateddoc', 'field_servicedetail_relatedpage', 'field_contact_us'] %}
+    {# Content #}
+    {{ content|without(withouts) }}
+    {# Related Documents and Contact Us #}
+    <section id="related-docs-and-contact" class="margin-top-4 desktop:margin-top-8">
+        <h2 id="additional-information" class="call-out">Additional Information</h2>
+        <div class="grid-row">
+            <div class="tablet:grid-col-4 desktop:grid-col-5 margin-y-4 desktop:margin-y-0 padding-2">
+                {% if content.field_servicedetail_relateddoc %}
+                    {{ content.field_servicedetail_relateddoc }}
+                {% endif %}
+                {% if content.field_servicedetail_relateddoc and content.field_servicedetail_relatedpage %}
+                    <br />
+                {% endif %}
+                {% if content.field_servicedetail_relatedpage %}
+                    {{ content.field_servicedetail_relatedpage }}
+                {% endif %}
+            </div><!-- /.tablet:grid-col-5 padding-2 -->
+            <div class="tablet:grid-col">
+                {% if content.field_contact_us %}
+                    {{ content.field_contact_us }}
+                {% endif %}
+            </div>
+        </div>
+    </section>
+    {# END Related Documents and Contact Us #}
+{% endblock body  %}
+
+{% block schema %}
+    {# JSON Info below temp #}
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "GovernmentService",
+            "name": "{{ node.label|e }}",
+            "serviceType": "{{ content.field_servicepage_servicetype.0 }}",
+            "isRelatedTo": [
+              {%- for item in content.field_servicedetail_relatedpage['#items'] -%}
+                {% if loop.last %}
+                  { "@type": "Service", "name": "{{ item.title|e }}", "url": "{{ item.uri }}" }
+                {% else %}
+                  { "@type": "Service", "name": "{{ item.title|e }}", "url": "{{ item.uri }}" },
+                {% endif %}
+              {%- endfor -%}
+            ],
+            "disambiguatingDescription": "{{ content.field_metadata.0['#paragraph'].field_short_description.0.value|spaceless|e }}"
+          }
+        ]
+      }
+    </script>
+{% endblock schema %}
+
+{# JSON Info below d9}
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "GovernmentService",
+        "name": "{{ node.label|e }}",
+        "serviceType": "{{ content.field_servicepage_servicetype.0 }}",
+        "isRelatedTo": [
+          {%- for item in content.field_service_relatedservice.0['#paragraph'].field_related_services -%}
+            {% if loop.last %}
+              { "@type": "Service", "name": "{{ item.entity.title.value|e }}", "url": "{{ url('entity.node.canonical', {'node': item.entity.nid.value}) }}" }
+            {% else %}
+              { "@type": "Service", "name": "{{ item.entity.title.value|e }}", "url": "{{ url('entity.node.canonical', {'node': item.entity.nid.value}) }}" },
+            {% endif %}
+          {%- endfor -%}
+        ],
+        "disambiguatingDescription": "{{ content.field_short_desc.0['#text']|spaceless|e }}"
+      }
+    ]
+  }
+</script>
+#}

@@ -1,0 +1,328 @@
+{#
+/**
+ * @file
+ * Default theme implementation to display a node of type 'Petition'.
+ * --------------
+ * @author christopherj.allen@bia.gov
+ * --------------
+ * The content type displays different fields based on "Template to Use" field
+ *    (Options: 1978, 1994, 2015)
+ */
+#}
+
+{% extends '/themes/custom/ia_uswds_subtheme/templates/includes/node_layout.html.twig' %}
+{% block body %}
+    {% set template_selected = content.field_template_to_use['#items'].getString() %}
+        {# 1978 Template Table #}
+        {% if template_selected == '1978' %}
+                <table id="petition-1978" class="usa-table usa-table--striped width-full">
+                    {% if node.field_petitioner_identifier is not empty %}
+                        <tr>
+                            <td class="item">Petitioner Number:</td>
+                            <td class="petition-field-data">{{ content.field_petitioner_identifier }}</td>
+                        </tr>
+                    {% endif %}
+                    {% if node.field_petitioner_name is not empty %}
+                        <tr>
+                            <td class="item">Petitioner Name:</td>
+                            <td class="petition-field-data">{{ content.field_petitioner_name }}</td>
+                        </tr>
+                    {% endif %}
+                    {% if node.field_state is not empty %}
+                        <tr>
+                            <td class="item">Petitioner State:</td>
+                            <td class="petition-field-data">{{ content.field_state }}</td>
+                        </tr>
+                    {% endif %}
+                    {% if node.field_acknowledged_or_denied is not empty %}
+                        <tr>
+                            <td class="item">Acknowledged/Denied/In Process:</td>
+                            <td class="petition-field-data">{{ content.field_acknowledged_or_denied }}</td>
+                        </tr>
+                    {% endif %}
+                    {% if node.field_date_decision is not empty %}
+                        <tr>
+                            <td class="item">Date Decision Effective:</td>
+                            <td class="petition-field-data">{{ content.field_date_decision }}</td>
+                        </tr>
+                    {% endif %}
+                    {% if node.field_current_status is not empty %}
+                        <tr>
+                            <td class="item">Current Status:</td>
+                            <td class="petition-field-data">{{ content.field_current_status }}</td>
+                        </tr>
+                    {% endif %}
+                    {% if node.field_currently_in_litigation is not empty %}
+                        <tr>
+                            <td class="item">Currently in Litigation:</td>
+                            <td class="petition-field-data">{{ content.field_currently_in_litigation }}</td>
+                        </tr>
+                    {% endif %}
+                    {% if node.field_ack_reg_rev is not empty %}
+                        <tr>
+                            <td class="item">Acknowledgment Regulation Revision Chosen by Petitioner:</td>
+                            <td class="petition-field-data">{{ content.field_ack_reg_rev }}</td>
+                        </tr>
+                    {% endif %}
+                    {% if content.field_associated_documents %}
+                        <tr>
+                            <td class="item">Associated Document(s):</td>
+                            <td class="petition-field-data">{{ content.field_associated_documents }}</td>
+                        </tr>
+                    {% endif %}
+                    {% if content.field_notes %}
+                        <tr>
+                            <td class="item">Notes:</td>
+                            <td class="petition-field-data">{{ content.field_notes }}</td>
+                        </tr>
+                    {% endif %}
+                </table>
+        {# END 1978 Template - Table #}
+
+    {# 2015 Template Table #}
+    {# "Petition Narrative Document(s)" field only displays for this template #}
+    {% elseif template_selected == '2015' %}
+        <table id="petition-2015" class="usa-table usa-table--striped width-full">
+            {% if node.field_petitioner_identifier is not empty %}
+            <tr>
+                <td class="item">Petitioner Number:</td>
+                <td class="petition-field-data">{{ content.field_petitioner_identifier }}</td>
+            </tr>
+            {% endif %}
+            {% if node.field_petitioner_name is not empty %}
+                <tr>
+                    <td class="item">Petitioner Name:</td>
+                    <td class="petition-field-data">{{ content.field_petitioner_name }}</td>
+                </tr>
+            {% endif %}
+            {% if node.field_state is not empty %}
+                <tr>
+                    <td class="item">Petitioner State:</td>
+                    <td class="petition-field-data">{{ content.field_state }}</td>
+                </tr>
+            {% endif %}
+            {% if node.field_acknowledged_or_denied is not empty %}
+                <tr>
+                    <td class="item">Acknowledged/Denied/In Process:</td>
+                    <td class="petition-field-data">{{ content.field_acknowledged_or_denied }}</td>
+                </tr>
+            {% endif %}
+            {% if node.field_date_decision is not empty %}
+                <tr>
+                    <td class="item">Date Decision Effective:</td>
+                    <td class="petition-field-data">{{ content.field_date_decision }}</td>
+                </tr>
+            {% endif %}
+            {% if node.field_current_status is not empty %}
+                <tr>
+                    <td class="item">Current Status:</td>
+                    <td class="petition-field-data">{{ content.field_current_status }}</td>
+                </tr>
+            {% endif %}
+            {% if node.field_currently_in_litigation is not empty %}
+                <tr>
+                    <td class="item">Currently in Litigation:</td>
+                    <td class="petition-field-data">{{ content.field_currently_in_litigation }}</td>
+                </tr>
+            {% endif %}
+            {% if node.field_ack_reg_rev is not empty %}
+                <tr>
+                    <td class="item">Acknowledgment Regulation Revision Chosen by Petitioner:</td>
+                    <td class="petition-field-data">{{ content.field_ack_reg_rev }}</td>
+                </tr>
+            {% endif %}
+            {% if node.field_pet_docs is not empty %}
+                <tr>
+                    <td class="item">Petition Narrative Document(s):</td>
+                    <td class="petition-field-data">{{ content.field_pet_docs}}</td>
+                </tr>
+            {% endif %}
+            {% if node.field_petitioner_contact is not empty %}
+                <tr>
+                    <td class="item">Petitioner Contact Information:</td>
+                    <td class="petition-field-data">{{ content.field_petitioner_contact }}</td>
+                </tr>
+            {% endif %}
+            {% if node.field_submit_opportunity is not empty  %}
+                <tr>
+                    <td class="item">Opportunity to Submit Comments:</td>
+                    <td class="petition-field-data">{{ content.field_submit_opportunity }}</td>
+                </tr>
+            {% endif %}
+            {% if node.field_request_opportunity is not empty %}
+                <tr>
+                    <td class="item">Opportunity to Request to be Kept Informed of General Actions:</td>
+                    <td class="petition-field-data">{{ content.field_request_opportunity }}</td>
+                </tr>
+            {% endif %}
+            {% if node.field_other_portions is not empty %}
+                <tr>
+                    <td class="item">Other Portions of the Documented Petition:</td>
+                    <td class="petition-field-data">{{ content.field_other_portions }}</td>
+                </tr>
+            {% endif %}
+            {% if node.field_comments_third_party is not empty %}
+                <tr>
+                    <td class="item">Comments or Materials Submitted by Third Parties:</td>
+                    <td class="petition-field-data">{{ content.field_comments_third_party }}</td>
+                </tr>
+            {% endif %}
+            {% if node.field_dept_docs is not empty %}
+                <tr>
+                    <td class="item">Substantive Documents Issued by the Department:</td>
+                    <td class="petition-field-data">{{ content.field_dept_docs }}</td>
+                </tr>
+            {% endif %}
+            {% if node.field_contact_list is not empty %}
+                <tr>
+                    <td class="item">OFA's Contact List for Petitioner:</td>
+                    <td class="petition-field-data">{{ content.field_contact_list }}</td>
+                </tr>
+            {% endif %}
+            {% if node.field_request_contact is not empty %}
+                <tr>
+                    <td class="item">Contact Information for Notified Parties and Other Individuals or Entities that Requested to Be Kept Informed:</td>
+                    <td class="petition-field-data">{{ content.field_request_contact }}</td>
+                </tr>
+            {% endif %}
+            {% if node.field_reg_ack_rev is not empty %}
+                <tr>
+                    <td class="item">Documents Issued under 1994 revision of Acknowledgment Regulations:</td>
+                    <td class="petition-field-data">{{ content.field_reg_ack_rev }}</td>
+                </tr>
+            {% endif %}
+            {% if node.field_notes is not empty %}
+                <tr>
+                    <td class="item">Notes:</td>
+                    <td class="petition-field-data">{{ content.field_notes }}</td>
+                </tr>
+            {% endif %}
+        </table>
+
+    {% else %}
+        {# 1978-1994-2015 Template Table
+             Third intermediate option:
+             Displays everything in 1978-1994 template PLUS
+             "Documents Issued under 1994 revision of Acknowledgement Regulations
+        #}
+        <table id="petition-1994" class="usa-table usa-table--striped width-full">
+            {% if node.field_petitioner_identifier is not empty %}
+                <tr>
+                    <td class="item">Petitioner Number:</td>
+                    <td class="petition-field-data">{{ content.field_petitioner_identifier }}</td>
+                </tr>
+            {% endif %}
+            {% if node.field_petitioner_name is not empty%}
+                <tr>
+                    <td class="item">Petitioner Name:</td>
+                    <td class="petition-field-data">{{ content.field_petitioner_name }}</td>
+                </tr>
+            {% endif %}
+            {% if node.field_state is not empty%}
+                <tr>
+                    <td class="item">Petitioner State:</td>
+                    <td class="petition-field-data">{{ content.field_state }}</td>
+                </tr>
+            {% endif %}
+            {% if node.field_acknowledged_or_denied is not empty %}
+                <tr>
+                    <td class="item">Acknowledged/Denied/In Process:</td>
+                    <td class="petition-field-data">{{ content.field_acknowledged_or_denied }}</td>
+                </tr>
+            {% endif %}
+            {% if node.field_date_decision is not empty %}
+                <tr>
+                    <td class="item">Date Decision Effective:</td>
+                    <td class="petition-field-data">{{ content.field_date_decision }}</td>
+                </tr>
+            {% endif %}
+            {% if node.field_current_status is not empty%}
+                <tr>
+                    <td class="item">Current Status:</td>
+                    <td class="petition-field-data">{{ content.field_current_status }}</td>
+                </tr>
+            {% endif %}
+            {% if node.field_currently_in_litigation is not empty%}
+                <tr>
+                    <td class="item">Currently in Litigation:</td>
+                    <td class="petition-field-data">{{ content.field_currently_in_litigation }}</td>
+                </tr>
+            {% endif %}
+            {% if node.field_ack_reg_rev is not empty%}
+                <tr>
+                    <td class="item">Acknowledgment Regulation Revision Chosen by Petitioner:</td>
+                    <td class="petition-field-data">{{ content.field_ack_reg_rev }}</td>
+                </tr>
+            {% endif %}
+            {% if node.field_pet_docs is not empty %}
+                <tr>
+                    <td class="item">Petition Narrative Document(s):</td>
+                    <td class="petition-field-data">{{ content.field_pet_docs}}</td>
+                </tr>
+            {% endif %}
+            {% if node.field_petitioner_contact is not empty %}
+                <tr>
+                    <td class="item">Petitioner Contact Information:</td>
+                    <td class="petition-field-data">{{ content.field_petitioner_contact }}</td>
+                </tr>
+            {% endif %}
+            {% if node.field_date_receipt is not empty %}
+                <tr>
+                    <td class="item">Date of Receipt of Documented Petition:</td>
+                    <td class="petition-field-data">{{ content.field_date_receipt }}</td>
+                </tr>
+            {% endif %}
+            {% if node.field_submit_opportunity is not empty  %}
+                <tr>
+                    <td class="item">Opportunity to Submit Comments:</td>
+                    <td class="petition-field-data">{{ content.field_submit_opportunity }}</td>
+                </tr>
+            {% endif %}
+            {% if node.field_request_opportunity is not empty %}
+                <tr>
+                    <td class="item">Opportunity to Request to be Kept Informed of General Actions:</td>
+                    <td class="petition-field-data">{{ content.field_request_opportunity }}</td>
+                </tr>
+            {% endif %}
+            {% if node.field_other_portions is not empty %}
+                <tr>
+                    <td class="item">Other Portions of the Documented Petition:</td>
+                    <td class="petition-field-data">{{ content.field_other_portions }}</td>
+                </tr>
+            {% endif %}
+            {% if node.field_comments_third_party is not empty %}
+                <tr>
+                    <td class="item">Comments or Materials Submitted by Third Parties:</td>
+                    <td class="petition-field-data">{{ content.field_comments_third_party }}</td>
+                </tr>
+            {% endif %}
+            {% if node.field_dept_docs is not empty %}
+                <tr>
+                    <td class="item">Substantive Documents Issued by the Department:</td>
+                    <td class="petition-field-data">{{ content.field_dept_docs }}</td>
+                </tr>
+            {% endif %}
+            {% if node.field_contact_list is not empty %}
+                <tr>
+                    <td class="item">OFA's Contact List for Petitioner:</td>
+                    <td class="petition-field-data">{{ content.field_contact_list }}</td>
+                </tr>
+            {% endif %}
+            {% if node.field_reg_ack_rev is not empty %}
+                <tr>
+                    <td class="item">Documents Issued under 1994 revision of Acknowledgment Regulations:</td>
+                    <td class="petition-field-data">{{ content.field_reg_ack_rev }}</td>
+                </tr>
+            {% endif %}
+            {% if node.field_notes is not empty %}
+                <tr>
+                    <td class="item">Notes:</td>
+                    <td class="petition-field-data">{{ content.field_notes }}</td>
+                </tr>
+            {% endif %}
+        </table>
+{% endif %}
+    
+{% endblock body %}
+
+

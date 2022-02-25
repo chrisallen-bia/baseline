@@ -1,0 +1,73 @@
+<div class="tablet:grid-col">
+    <!--<div class="bg-base-lighter radius-lg padding-2 margin-top-4">-->
+    <div class="bg-base-lighter radius-lg padding-2">
+    
+        <h2 class="text-black margin-bottom-1" id="contact-us">Contact Us</h2>
+    
+        <div class="grid-row">
+            <div class="grid-col-12 tablet:grid-col">
+                {# Org Name and Address #}
+                <div class="grid-row grid-gap-2 margin-y-1">
+                    <div class="grid-col-1"><i class="fas fa-money-check-edit" aria-hidden="true"></i></div>
+                    <div class="grid-col-11">
+                        {% if content.field_contactus_officename.0 %}
+                            <span class="text-bold">{{ content.field_contactus_officename }}</span>
+                        {% endif %}
+                        {% if address_full %}
+                            {% set address_full_html = {
+                                '#type':   'processed_text',
+                                '#text':    address_full,
+                                '#format': 'full_html',
+                            } %}
+                            <address>{{ address_full_html }}</address>
+                        {% endif %}
+    
+                        {{ content.field_serviceevent_mapurl }}
+                    </div><!-- /.padding-left-3 -->
+                </div><!-- /.grid-row -->
+                {# Hours #}
+                {% if content.field_contactus_phonecallhours.0 %}
+                    <div class="grid-row grid-gap-2 margin-y-1">
+                        <div class="grid-col-1 margin-top-05"><i class="fas fa-clock" aria-hidden="true"></i></div>
+                        <div class="grid-col-11">
+                            <span>{{ content.field_contactus_phonecallhours }}</span>
+                        </div>
+                    </div><!-- /.grid-row margin-y-1 -->
+                {% endif %}
+            </div><!-- /.tablet:grid-col -->
+            <div class="grid-col-12 tablet:grid-col-5">
+                {# Email #}
+                {% if content.field_contactus_email.0 %}
+                    <div class="grid-row grid-gap-2 margin-y-1">
+                        <div class="grid-col-1"><i class="fas fa-envelope"></i></div>
+                        <div class="grid-col-11">
+                            {#<span class="text-bold font-sans-md"><a href="mailto:{{ content.field_email }}" target="_blank">{{ content.field_email }}</a></span>#}
+                            {{ content.field_contactus_email }}
+                        </div>
+                    </div><!-- /.grid-row -->
+                {% endif %}
+    
+                {# Telephone #}
+                {% if content.field_contactus_phone.0 %}
+                    <div class="grid-row grid-gap-2 margin-top-1">
+                        <div class="grid-col-1 margin-top-05"><i class="fas fa-phone" aria-hidden="true"></i></div>
+                        <div class="grid-col-11">
+                            {#<span class="text-bold font-sans-md"><a href="tel:{{ content.field_telephone }}">{{ content.field_telephone }}</a></span></div>#}
+                            {{ content.field_contactus_phone }}
+                        </div>
+                    </div><!-- /.grid-row margin-top-1 -->
+                {% endif %}
+    
+                {# Fax #}
+                {% if content.field_contactus_fax.0 %}
+                    <div class="grid-row grid-gap-2 margin-top-1">
+                        <div class="grid-col-1 margin-top-05"><i class="fas fa-fax" aria-hidden="true"></i></div>
+                        <div class="grid-col-11">
+                            {{ content.field_contactus_fax }}
+                        </div>
+                    </div><!-- /.grid-row margin-top-1 -->
+                {% endif %}
+            </div><!-- /.tablet:grid-col float-right -->
+        </div><!-- /.grid-row -->
+    </div>
+</div>

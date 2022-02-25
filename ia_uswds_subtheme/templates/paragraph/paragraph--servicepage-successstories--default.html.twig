@@ -1,0 +1,106 @@
+{#
+/**
+ * @file
+ * Theme override for :
+ * Paragraph = Success Stories - Service Page - Default Layout
+ * @author
+ */
+#}
+<!-- Slider Styles -->
+<style>
+
+    ul.usa-card-group.slider{
+        padding-left:0;
+    }
+    .modal-content {
+        border-radius: 0;
+    }
+    .modal-header {
+        border-bottom: none;
+    }
+    .modal-footer {
+        border-top: none;
+    }
+    .success-story-info-box {
+        background: #ce6635;
+        color: #fcfbfd;
+        padding: 1rem;
+        margin: 1rem;
+    }
+    .success-story-info-box>div {
+        display: flex;
+    }
+    .success-story-info-box>div>div:first-child {
+        width: 45%;
+        text-align: right;
+        padding-right: 1rem;
+        font-weight: 500;
+    }
+    .success-story-info-box>div>div:last-child {
+        width: 55%;
+    }
+    /*Slick Sliders Style Block */
+    html,body {
+        margin: 0;
+        padding: 0;
+    }
+    * {
+        box-sizing: border-box;
+    }
+    .slider {
+        /* width: 90%
+		 margin: 0 auto;*/
+    }
+    .slick-slide {
+        margin: 0px 0px;
+    }
+    .slick-slide img {
+        width: 100%;
+    }
+    .slick-prev:before,
+    .slick-next:before {
+        color: black;
+    }
+    .slick-slide {
+        transition: all ease-in-out .3s;
+        opacity: .2;
+    }
+    .slick-active {
+        opacity: 1;
+    }
+    .slick-current {
+        opacity: 1;
+    }
+
+    .new-wrapper .grid-row:last-child {
+        padding: .5rem 0.2rem 0.5rem 0;
+    }
+
+</style>
+
+	<li class="tablet:grid-col-4 usa-card usa-card--header-first">
+		<div class="usa-card__container">
+			<header class="usa-card__header">
+				<h3 class="usa-card__heading">
+					{% if content.field_successstory_storytitle %}
+						{{ content.field_successstory_storytitle.0 }}
+					{% endif %}
+				</h3>
+			</header>
+			<div class="usa-card__media usa-card__media--inset">
+				<div class="usa-card__img">
+					{% if content.field_successstory_storyimage %}
+						{{ content.field_successstory_storyimage.0 }}
+					{% endif %}
+				</div>
+				<div class="usa-card__body">
+					<p>	{% if content.field_successstory_story %}
+						{{ content.field_successstory_story.0 }}
+					{% endif %}</p>
+				</div>
+				<div class="usa-card__footer">
+					<button target="_blank" class="usa-button" data-toggle="modal" data-target="#success-stories-modal" data-story-index="0" tabindex="0">Learn More</button>
+				</div>
+			</div>
+		</div>
+	</li>

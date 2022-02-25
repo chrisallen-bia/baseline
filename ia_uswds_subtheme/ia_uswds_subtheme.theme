@@ -1,0 +1,387 @@
+<?php
+
+/**
+ * @file
+ * USWDS Base sub-theme.
+ *
+ * Place your custom PHP code in this file.
+ */
+
+//use Drupal\node\Entity\Node;
+use Drupal\image\Entity\ImageStyle;
+
+function ia_uswds_subtheme_preprocess_page_title(&$variables) {
+
+    // Set the default hero bg image to be used.
+    $variables['default_bg_image'] = 'https://www.bia.gov/sites/bia.gov/files/heroBG.jpg';
+    $variables['has_hero'] = TRUE;
+
+    if (($node = \Drupal::routeMatch()->getParameter('node')) && $node instanceof \Drupal\node\NodeInterface) {
+        //Alternate node titles for MMU
+        if($node->getType() == 'missing_murdered_cases'){
+            if($node->field_mmu_case_type){
+
+            }
+        }
+
+        $field_metadata_paragraph = null;
+
+        if(isset($node->field_metadata->entity)) {
+            $field_metadata_paragraph = $node->field_metadata->entity;
+
+            //Subtitle - If there is no subtitle value, it will return null and be handled in page-title.html.twig
+            $variables['subtitle'] = $field_metadata_paragraph->field_subtitle->value;
+
+            //Banner Image
+            if(isset($field_metadata_paragraph->field_banner_image->entity)) {
+                $variables['banner_image'] = $field_metadata_paragraph->field_banner_image->entity->getFileUri();
+            }
+        }
+        else {
+            //Banner Image when not inside of field_metadata
+            if(isset($node->field_banner_image->entity)){
+                $variables['banner_image'] = $node->field_banner_image->entity->getFileUri();
+            }
+        }
+    }
+
+}
+function ia_uswds_subtheme_preprocess_node__missing_murdered_cases(&$variables){
+    $node = $variables['node'];
+
+    //dump($node->getTitle());
+
+    // Generated the profile photo url for schema.org
+    if(isset($node->field_profile_photo->entity)){
+        $style = ImageStyle::load('large');
+        $variables['mmu_case_profile_photo'] = $style->buildUrl($node->field_profile_photo->entity->getFileUri()); // Generates file url.
+    }
+}
+
+function ia_uswds_subtheme_preprocess_node__service_page_how_to(&$variables) {
+    $instrumentJson = "";
+    $instruments = array();
+    $instrumentsIterator = 0;
+    $howToMethods = isset($variables['content']['field_showto_howtoapply']) ? $variables['content']['field_showto_howtoapply'] : undefined;
+
+
+    if($howToMethods
+        && isset($howToMethods[0]['#paragraph']->field_showto_howtoapply_mail)
+        && !empty($howToMethods[0]['#paragraph']->field_showto_howtoapply_mail[0]->value)){
+        array_push($instruments, 'Apply by Mail - ' . $howToMethods[0]['#paragraph']->field_showto_howtoapply_mail[0]->value);
+    }
+    if($howToMethods
+        && isset($howToMethods[0]['#paragraph']->field_showto_howtoapply_phone)
+        && !empty($howToMethods[0]['#paragraph']->field_showto_howtoapply_phone[0]->value)){
+        array_push($instruments, 'Apply by phone - ' . $howToMethods[0]['#paragraph']->field_showto_howtoapply_phone[0]->value);
+    }
+    //dump($variables['content']['field_showto_howtoapply'][0]['#paragraph']->field_showto_howtoapply_online[0]->value);
+    if($howToMethods
+        && isset($howToMethods[0]['#paragraph']->field_showto_howtoapply_online)
+        && !empty($howToMethods[0]['#paragraph']->field_showto_howtoapply_online[0]->value)){
+        array_push($instruments, 'Submit Online - ' . $howToMethods[0]['#paragraph']->field_showto_howtoapply_online[0]->value);
+    }
+    if($howToMethods
+        && isset($howToMethods[0]['#paragraph']->field_showto_howtoapply_fax)
+        && !empty($howToMethods[0]['#paragraph']->field_showto_howtoapply_fax[0]->value)){
+        array_push($instruments, 'Apply by fax - ' . $howToMethods[0]['#paragraph']->field_showto_howtoapply_fax[0]->value);
+    }
+
+    foreach($instruments as $instrument){
+        $instrumentJson .= str_replace('"', '\"', str_replace(array("\r", "\n"), '', $instrument));
+        if($instrumentsIterator < count($instruments)-1){
+            $instrumentJson .= '; ';
+        }
+        $instrumentsIterator++;
+    }
+
+    $variables['schema_org_instruments'] = $instrumentJson;
+    // end instruments
+}
+
+//function ia_uswds_subtheme_preprocess_node__contact_us(&$variables) {
+function ia_uswds_subtheme_preprocess_node__contact_us(&$variables) {
+    $addressLine1 = (isset($variables['content']['field_address'][0]['address_line1']) && !empty($variables['content']['field_address'][0]['address_line1']['#value'])) ? $variables['content']['field_address'][0]['address_line1']['#value'] . '<br />' : '';
+    $addressLine2 = (isset($variables['content']['field_address'][0]['address_line2']) && !empty($variables['content']['field_address'][0]['address_line2']['#value'])) ? $variables['content']['field_address'][0]['address_line2']['#value'] . '<br />' : '';
+    $city = (isset($variables['content']['field_address'][0]['locality']) && !empty($variables['content']['field_address'][0]['locality']['#value'])) ? $variables['content']['field_address'][0]['locality']['#value'] . ', ' : '';
+    $state = (isset($variables['content']['field_address'][0]['administrative_area']) && !empty($variables['content']['field_address'][0]['administrative_area']['#value'])) ? $variables['content']['field_address'][0]['administrative_area']['#value'] . ' ' : '';
+    $zip = (isset($variables['content']['field_address'][0]['postal_code']) && !empty($variables['content']['field_address'][0]['postal_code']['#value'])) ? $variables['content']['field_address'][0]['postal_code']['#value'] : '';
+
+    $address_full = $addressLine1 . $addressLine2 . $city . $state . $zip;
+
+    $variables['address_full'] = $address_full;
+
+    // Set the label for Directions to 'Get Directions'
+    $variables['content']['field_serviceevent_mapurl'][0]['#title'] = 'Get Directions';
+}
+
+
+function ia_uswds_subtheme_preprocess_paragraph__startenddate(&$variables) {
+    $start_date = (isset($variables['content']['field_startenddate']) && !empty($variables['content']['field_startenddate'][0]['#context']['value'])) ? $variables['content']['field_startenddate'][0]['#context']['value'] . '<br />' : '';
+    $start_time = (isset($variables['content']['field_startenddate_start']) && !empty($variables['content']['field_startenddate_start'][0]['#context']['value'])) ? $variables['content']['field_startenddate_start'][0]['#context']['value'] . '<br />' : '';
+
+    $variables['tc_formatted_startDate'] = format_date($start_date->created->value, "custom", "D, M j, Y");
+    $variables['tc_formatted_startTime'] = format_date($start_time->created->value, "custom", "g:i A");
+}
+
+
+function ia_uswds_subtheme_preprocess_paragraph__contact_us(&$variables) {
+    $addressLine1 = (isset($variables['content']['field_contactus_address']) && !empty($variables['content']['field_contactus_address'][0]['#context']['value'])) ? $variables['content']['field_contactus_address'][0]['#context']['value'] . '<br />' : '';
+    $city = (isset($variables['content']['field_contactus_city']) && !empty($variables['content']['field_contactus_city'][0]['#context']['value'])) ? $variables['content']['field_contactus_city'][0]['#context']['value'] . ', ' : '';
+    $state = (isset($variables['content']['field_tld_state']) && !empty($variables['content']['field_tld_state'][0]['#context']['value'])) ? $variables['content']['field_tld_state'][0]['#context']['value'] . ' ' : '';
+    $zip = (isset($variables['content']['field_contactus_zip']) && !empty($variables['content']['field_contactus_zip'][0]['#context']['value'])) ? $variables['content']['field_contactus_zip'][0]['#context']['value'] : '';
+
+    $address_full = $addressLine1 . $city . $state . $zip;
+
+    $variables['address_full'] = $address_full;
+
+    // Set the label for Directions to 'Get Directions'
+    $variables['content']['field_serviceevent_mapurl'][0]['#title'] = 'Get Directions';
+}
+
+function ia_uswds_subtheme_preprocess_field__node__field_org_description(&$variables) {
+    if (($node = \Drupal::routeMatch()->getParameter('node')) && $node instanceof \Drupal\node\NodeInterface) {
+        $variables['org_name'] = $node->getTitle();
+    }
+}
+
+
+function ia_uswds_subtheme_preprocess_field__node__field_org_relatedorgs(&$variables) {
+    if (($node = \Drupal::routeMatch()->getParameter('node')) && $node instanceof \Drupal\node\NodeInterface) {
+        $parentOrgs = array();
+        $peerOrgs = array();
+        $childOrgs = array();
+
+
+        $curr_org = "";
+        $curr_org = $node->getTitle();
+
+
+        // Add the current node as the 'peer'
+        array_push($peerOrgs, $curr_org);
+
+        // Loop through the tasks, if it's a Top Task put it in the top task array, else put it in the Other tasks array
+        foreach ($variables['items'] as $currOrg) {
+            if ($currOrg['content']['#paragraph']->field_org_relatedtype->value == 'Report To') {
+                array_push($parentOrgs, $currOrg);
+            } elseif ($currOrg['content']['#paragraph']->field_org_relatedtype->value == 'Managing') {
+                array_push($childOrgs, $currOrg);
+            }
+        }
+
+        $variables['parent_orgs'] = $parentOrgs;
+        $variables['curr_org'] = $curr_org;
+        $variables['child_orgs'] = $childOrgs;
+    }
+}
+
+function ia_uswds_subtheme_preprocess_block__block_content__hero(&$variables) {
+    if (($node = \Drupal::routeMatch()->getParameter('node')) && $node instanceof \Drupal\node\NodeInterface) {
+        // This will be true if there are any values in 'Provided By', 'Related To', etc. The value will be used
+        // in the relationship indicator template to choose whether or not to render the containing element (grey box)
+        $is_relationship_indicator_active = false;
+
+        //Provided By (Nested under metadata)
+        if(isset($node->field_metadata->entity)) {
+            $field_metadata_paragraph = null;
+            $field_metadata_paragraph = $node->field_metadata->entity;
+
+            if(isset($field_metadata_paragraph->field_servicepage_providedby[0])) {
+                $variables['provided_by_url'] = $field_metadata_paragraph->field_servicepage_providedby[0]->getUrl()->toString();
+                $variables['provided_by_title'] = $field_metadata_paragraph->field_servicepage_providedby[0]->title;
+
+                $is_relationship_indicator_active = true;
+            }
+        } //End Provided By
+
+        //Related Service
+        if(isset($node->field_service_relatedservice)){
+            $variables['related_services'] = $node->field_service_relatedservice;
+
+            $is_relationship_indicator_active = true;
+        } // End Related Service
+
+        // Related Topic
+        if(isset($node->field_servicepage_topic[0])) {
+            $variables['related_topics_url'] = $node->field_servicepage_topic[0]->getUrl()->toString();
+            $variables['related_topics_title'] = $node->field_servicepage_topic[0]->title;
+
+            $is_relationship_indicator_active = true;
+        } // End Related Topic
+
+        $variables['is_relationship_indicator_active'] = $is_relationship_indicator_active;
+    }
+}
+
+function ia_uswds_subtheme_preprocess_block__personblockreference(&$variables) {
+    if (($node = \Drupal::routeMatch()->getParameter('node')) && $node instanceof \Drupal\node\NodeInterface) {
+
+        dump($node->field_org_leader->entity->get('field_person_biopicture'));
+
+        if($node->field_org_leader && $node->field_org_leader[0]){
+            $variables['person_name'] = $node->field_org_leader->entity->getTitle();
+            $variables['person_title'] = $node->field_org_leader->entity->get('field_person_jobtitle')->getValue()[0]['value'];
+//            $variables['person_picture'] = $node->field_org_leader;
+            $variables['person_bio'] = $node->field_org_leader->entity->get('body')->getValue()[0]['value'];
+//            $variables['person_bio'] = check_markup(
+//                $node->field_org_leader->entity->get('body')->getValue()[0]['value'],
+//                'basic_html',
+//                $node->field_org_leader->entity->language()->getId()
+//            );
+//            $variables['person_url'] = $node->field_org_leader;
+        }
+    }
+}
+function ia_uswds_subtheme_preprocess_field__node__field_org_shortdescription(&$variables) {
+    if (($node = \Drupal::routeMatch()->getParameter('node')) && $node instanceof \Drupal\node\NodeInterface) {
+        $variables['node_title'] = $node->getTitle();
+    }
+}
+
+// Turn off until d9
+//function ia_uswds_subtheme_preprocess_field__field_guide_sec_keyaction(&$variables) {
+//    $variables['action_link_size'] = $variables['element']['#object']->field_action_link_size->value;
+//}
+
+function ia_uswds_subtheme_preprocess_field__paragraph__field_image__content_image(&$variables) {
+    // Depending on layout, change the image style
+    $media_layout_type = $variables['element']['#object']->field_media_layout->value;
+
+    // Add responsive (fluid) classes to the image
+    foreach ($variables['items'] as &$item) {
+        if(isset($item['content'])){
+            if(isset($item['content']['#item_attributes'])){
+                if($media_layout_type == 'basic') {
+                    $variables['items'][0]['content']['#image_style'] = 'scale_long_edge_maintain_ratio_lg';
+                    $item['content']['#item_attributes']['class'][] = 'width-full height-auto';
+                } else {
+                    $variables['items'][0]['content']['#image_style'] = 'scale_long_edge_maintain_ratio_lg';
+                    $item['content']['#item_attributes']['class'][] = 'width-full tablet:width-card-lg desktop:width-mobile height-auto';
+                }
+            }
+        }
+    }
+}
+
+//{# setup main content col width #}
+//    {% set main_content_cols = 'fill' %}
+//
+//    {% if page.sidebar_first or page.sidebar_second %}
+//    {% set main_content_cols = '9' %}
+//    {% endif %}
+//
+//    {% if page.sidebar_first and page.sidebar_second %}
+//    {% set main_content_cols = '6' %}
+//    {% endif %}
+
+function ia_uswds_subtheme_preprocess_page(&$variables) {
+    $main_content_cols = 'fill';
+    $main_classes = 'grid-container'; // default for most content types, but not for those that use 3 col layouts
+    $node_type = "";
+
+    if(isset($variables['node'])) {
+        $node_type = $variables['node']->get('type')->getValue()[0]['target_id'];
+    }
+    // Set the num of cols
+    // If only one sidebar, it's 9
+    if(isset($variables['sidebar_first']) || isset($variables['sidebar_second'])){
+        $main_content_cols = '9';
+    }
+    // If both sidebars, it's 6
+    if(isset($variables['sidebar_first']) && isset($variables['sidebar_second'])){
+        $main_content_cols = '6';
+    }
+    //If it's a 3 col layout, change main_classes
+    if((isset($variables['sidebar_first']) && isset($variables['sidebar_second'])) || $node_type=='organization'){
+        $main_classes = 'margin-x-2';
+    }
+    $variables['main_content_cols'] = $main_content_cols;
+    $variables['main_classes'] = $main_classes;
+}
+
+function ia_uswds_subtheme_preprocess(&$variables, $hook) {
+    try {
+        $variables['is_front'] = \Drupal::service('path.matcher')->isFrontPage();
+        }
+        catch (Exception $e) {
+        $variables['is_front'] = FALSE;
+        }
+        $variables['#cache']['contexts'][] = 'url.path.is_front';
+}
+
+//FERMIN 02/02/2022 - To view form template suggestions
+
+//FORM//
+function ia_uswds_subtheme_theme_suggestions_form_alter(array &$suggestions, array $variables, $hook) {
+  if ($hook == 'form' & !empty($variables['element']['#id'])) {
+      $suggestions[] = 'form__' . str_replace('-', '_', $variables['element']['#id']);
+ }
+}
+function ia_uswds_subtheme_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
+
+    foreach (\Drupal\Core\Render\Element::children($form) as $key) {
+        $form[$key]['#attributes']['data-twig-suggestion'] = $form['#id'];
+    }
+
+    $form['actions']['submit']['#attributes']['data-twig-suggestion'] = $form['#id'];
+}
+
+//FORM ELEMENT//
+function ia_uswds_subtheme_theme_suggestions_form_element_alter(array &$suggestions, array $variables, $hook) {
+    if (isset($variables['element']['#name'])) {
+        $suggestions[] = 'form_element__' . str_replace('-','_', $variables['element']['#name']);
+    }
+}
+
+//INPUT//
+function ia_uswds_subtheme_theme_suggestions_input_alter(&$suggestions, array $variables) {
+    $element = $variables['element'];
+    if (isset($element['#attributes']['data-twig-suggestion'])) {
+        $suggestion_suffix = str_replace(['-'], '_', $element['#attributes']['data-twig-suggestion']);
+        $suggestions[] = 'input__' . $element['#type'] . '__' . $suggestion_suffix;
+    }
+}
+
+//CONTAINER//
+function ia_uswds_subtheme_theme_suggestions_container_alter(array &$suggestions, array &$variables) {
+    $element = $variables['element'];
+    $suggestions = [];
+
+    if (isset($element['#array_parents'])) {
+        $suggestions[] = 'container__has_parent' . '__' . $element['#type'];
+    }
+    else {
+        $suggestions[] = 'container__no_parent';
+    }
+
+    if (isset($element['#type']) && $element['#type'] != 'container') {
+        $suggestions[] = 'container__' . $element['#type'];
+    }
+
+    if (isset($element['#type']) && $element['#type'] == 'container' && isset($element['children']['#type'])) {
+        $suggestions[] = 'container__' . $element['children']['#type'];
+    }
+
+    if (isset($element['#type']) && $element['#type'] == 'view') {
+        $suggestions[] = 'container__view__' . $element['#name'];
+        $suggestions[] = 'container__view__' . $element['#name'] . '__' . $element['#display_id'];
+    }
+    elseif (isset($element['widget'][0]['#type']) && $element['widget'][0]['#type'] === 'managed_file') {
+        $suggestions[] = 'container__file';
+        $suggestions[] = 'container__file__' . $element['widget']['#field_name'];
+    }
+
+    // Additional module-specific container templates.
+    if (isset($element['#group'])) {
+        $suggestions[] = 'container__' . str_replace('-', '_', $element['#group']);
+    }
+
+    if (isset($element['#webform_key'])) {
+        $suggestions[] = 'container__' . str_replace('-', '_', $element['#webform_key']);
+    }
+
+    return $suggestions;
+
+}
+//FERMIN END
+

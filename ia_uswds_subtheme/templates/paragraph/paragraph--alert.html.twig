@@ -1,0 +1,24 @@
+{%
+    set classes = [
+    'paragraph',
+    'paragraph--type--' ~ paragraph.bundle|clean_class,
+    view_mode ? 'paragraph--view-mode--' ~ view_mode|clean_class,
+    not paragraph.isPublished() ? 'paragraph--unpublished'
+]
+%}
+
+{{ dump(content.field_date_range) }}
+<div class="usa-alert usa-alert--info" >
+{% block paragraph %}
+    {% block content %}
+    <div class="usa-alert__body">
+        {% if content.field_title  %}
+        <h4 class="usa-alert__heading"> {{ content.field_title }} </h4>
+        {% endif %}
+        <p class="usa-alert__text"> {{ content.field_message }} </p>
+    </div>
+    {% endblock %}
+{% endblock paragraph %}
+</div>
+
+

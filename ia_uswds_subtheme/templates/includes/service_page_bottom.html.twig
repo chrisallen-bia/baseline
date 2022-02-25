@@ -1,0 +1,20 @@
+{#<section id="service-page-bottom" class="margin-y-4">#}
+<div id="service-page-bottom" class="margin-y-4">
+    <div class="grid-row margin-top-2 ">
+        {# Related Resources/Documents #}
+        {% if content.field_related %}
+            {#<div class="tablet:grid-col-4 desktop:grid-col-5 padding-right-2">#}
+            <section id="related-content" class="tablet:grid-col-4 desktop:grid-col-5 padding-right-2">
+                {{ content.field_related }}
+            </section>
+        {% endif %}
+        {# Contact Us Card #}
+        {% if content.field_contact_us %}
+            {#<div class="grid-col-12 tablet:grid-col">#}
+            <section class="grid-col-12 tablet:grid-col">
+                <h2 class="call-out usa-sr-only">Contact Us</h2>
+                {{ content.field_contact_us }}
+            </section>
+        {% endif %}
+    </div>
+</div>

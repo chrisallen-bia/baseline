@@ -1,0 +1,28 @@
+{%
+    set title_classes = [
+    label_display == 'visually_hidden' ? 'usa-sr-only'
+]
+%}
+
+{%
+    set item_classes = [
+    'usa-button',
+    'usa-button--outline',
+    'ia-action-link'
+]
+%}
+
+<div class="margin-y-4">
+    {% if not label_hidden %}
+        {% set header_id = label|clean_id %}
+        <h3{{ title_attributes.addClass(title_classes).setAttribute('id', header_id) }}>{{ label }}</h3>
+    {% endif %}
+
+    <div class="grid-row grid-gap-2">
+        {% for item in items %}
+            <div class="grid-col-4">
+                <a{{ item.attributes.addClass(item_classes) }} href="{{ item.content['#url'] }}">{{ item.content['#title'] }}</a>
+            </div>
+        {% endfor %}
+    </div>
+</div>

@@ -1,0 +1,24 @@
+{#
+/**
+ * @file
+ * Theme override for:
+ * Node Type = Guide
+ * Field = 	Resource (field_guide_resource)
+ */
+#}
+{%
+	set classes = [
+	'margin-y-4'
+]
+%}
+
+<div{{ attributes.addClass(classes) }}>
+	{% if label_hidden==false %}
+		<h2 class="call-out" {{ title_attributes.addClass(title_classes)}}>{{ label }}</h2>
+	{% endif %}
+	<ul>
+	{% for item in items %}
+		<li>{{ item.content }}</li>
+	{% endfor %}
+	</ul>
+</div>

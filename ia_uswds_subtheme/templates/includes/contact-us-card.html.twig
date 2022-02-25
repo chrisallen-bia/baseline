@@ -1,0 +1,56 @@
+{# Full width Contact Card #}
+{% set layout = (layout == 'full' ) ? 'tablet:grid-col-5' : '' %}
+{% set city = contact.city ? contact.city ~ ', ' : '' %}
+<div class="bg-base-lighter radius-lg padding-2">
+    <h3>Contact Us</h3>
+    <div class="grid-row">
+        <div class="grid-col-12 tablet:grid-col">
+            <div class="grid-row grid-gap-2 margin-y-1">
+                <div class="grid-col-1"><i class="fas fa-money-check-edit"></i></div>
+                <div class="grid-col-11">
+                    {% if contact.officename %}
+                        <span class="text-bold">{{ contact.officename }}</span>
+                    {% endif %}
+                    {% if contact.address %}
+                        <address>{{ contact.address }}<br>{{ city }}{{ contact.state ~ ' '}}{{ contact.zip }}</address>
+                    {% endif %}
+                </div><!-- /.padding-left-3 -->
+            </div><!-- /.grid-row -->
+            {% if contact.phonecallhours %}
+                <div class="grid-row grid-gap-2 margin-y-1">
+                    <div class="grid-col-1 margin-top-05"><i class="fas fa-clock"></i></div>
+                    <div class="grid-col-11">
+                        <span>Hours</span><br>
+                        <span>{{ contact.phonecallhours }}</span>
+                    </div>
+                </div><!-- /.grid-row margin-y-1 -->
+            {% endif %}
+        </div><!-- /.tablet:grid-col -->
+        <div class="grid-col-12{{ layout }}">
+            {% if contact.email %}
+                <div class="grid-row grid-gap-2 margin-y-1">
+                    <div class="grid-col-1"><i class="fas fa-envelope"></i></div>
+                    <div class="grid-col-11">Email<br>
+                        <span class="text-bold font-sans-md"><a href="mailto:{{ contact.email }}" target="_blank">{{ contact.email }}</a></span>
+                    </div>
+                </div><!-- /.grid-row -->
+            {% endif %}
+            {% if contact.phone %}
+                <div class="grid-row grid-gap-2 margin-top-1">
+                    <div class="grid-col-1 margin-top-05"><i class="fas fa-phone" aria-hidden="true"></i></div>
+                    <div class="grid-col-11">Telephone<br>
+                        <span class="text-bold font-sans-md"><a href="tel:{{ contact.phone }}">{{ contact.phone }}</a></span>
+                    </div>
+                </div><!-- /.grid-row margin-top-1 -->
+            {% endif %}
+            {% if contact.fax %}
+                <div class="grid-row grid-gap-2 margin-top-1">
+                    <div class="grid-col-1 margin-top-05"><i class="fas fa-fax" aria-hidden="true"></i></div>
+                    <div class="grid-col-11">Fax<br>
+                        <span class="text-bold font-sans-md">{{ contact.fax }}</span>
+                    </div>
+                </div><!-- /.grid-row margin-top-1 -->
+            {% endif %}
+        </div><!-- /.tablet:grid-col float-right -->
+    </div><!-- /.grid-row -->
+</div><!-- .bg-base-lighter radius-lg padding-2 -->

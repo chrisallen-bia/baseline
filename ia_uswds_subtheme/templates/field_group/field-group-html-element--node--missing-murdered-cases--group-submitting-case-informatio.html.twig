@@ -1,0 +1,25 @@
+{%
+    set section_title = attributes.id
+%}
+
+
+<{{ wrapper_element }} {{ attributes.removeAttribute('id') }}>
+{% if title %}
+    <{{ title_element }}{{ title_attributes.setAttribute('id', section_title) }}>{{ title }}</{{ title_element }}>
+{% endif %}
+<div class="grid-row grid-gap-2 margin-bottom-4">
+    <div class="tablet:grid-col-4 blue-rounded-cards"><a href="sms://847411&amp;body=BIAMMU" id="sms_case_detail">Text BIAMMU and Your Tip to 847411</a></div>
+    <div class="tablet:grid-col-4 blue-rounded-cards"><a href="tel:1-833-560-2065">Call in Tips to 1-833-560-2065</a>
+    </div>
+    <div class="tablet:grid-col-4 blue-rounded-cards"><a href="mailto:MMU_OJS@bia.gov" data-extlink="">Email OJS_MMU@bia.gov</a></div>
+</div>
+<div class="grid-row grid-gap">
+    {% if collapsible %}
+    <div class="field-group-wrapper">
+        {% endif %}
+        {{children}}
+        {% if collapsible %}
+    </div>
+    {% endif %}
+</div>
+</{{ wrapper_element }}>

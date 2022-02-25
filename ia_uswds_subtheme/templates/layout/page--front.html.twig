@@ -1,0 +1,327 @@
+{#
+/**
+ * @file
+ * Theme override to display IA Front Page.
+ * ----
+ * @author - christopherj.allen@bia.gov
+ * ----
+ */
+#}
+<style>
+    /* four highlights under Hero */
+    .front-page-highlight-cards{
+        color:#fff;
+        line-height: 1.75rem;
+        position:relative;
+    }
+    .front-page-highlight-cards h1{
+        color:#000;
+        font-family: Public Sans Web,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol!important;
+        font-weight:600;
+    }
+    h2.white-front-highlight{
+        color:#fff;
+        font-family: Public Sans Web,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol!important;
+    }
+
+    .border-white, .hover\:border-white:hover {
+        border-color: #fff;
+    }
+    .front-page-mini-heroes ul.usa-button-group li.usa-button-group__item a,
+    .front-page-mini-heroes ul.usa-button-group li.usa-button-group__item a:hover,
+    .front-page-mini-heroes ul.usa-button-group li.usa-button-group__item a:visited,
+    .front-page-mini-heroes ul.add-list-reset a,
+    .front-page-mini-heroes ul.add-list-reset a:hover,
+    .front-page-mini-heroes ul.add-list-reset a:visited,
+    div.float-right.margin-top-2 a
+    {
+        color:#000;
+    }
+    .front-page-news-highlight {
+        height: 14rem;
+    }
+
+    .front-page-news-highlight img{
+        height: 200px;
+        max-height: 200px;
+        /*width: auto;*/
+        object-fit: cover;
+    }
+
+    .front-page-news-items-three-by-one .grid-container{
+        width:80rem;
+        max-width:100%;
+    }
+
+    .view-front-page-news-2020.usa-card.usa-card__img,
+    .view-front-page-news-2020 .usa-card .usa-card__img,
+    .front-page-news-items-three-by-one .usa-card__img {
+        max-height: 250px;
+        object-fit: cover;
+    }
+
+    .front-page-news-items-three-by-one .usa-card__footer a,
+    .front-page-news-items-three-by-one .usa-card__footer a:hover,
+    .front-page-news-items-three-by-one .usa-card__footer a:visited{
+        color:#000;
+    }
+</style>
+
+{% if government_banner %}
+    <section class="usa-banner">
+        {{ government_banner }}
+    </section>
+{% endif %}
+
+<div class="usa-overlay"></div>
+
+<header class="{{ header_classes }}" id="header" role="banner">
+    {% if page.header_top %}
+        <div class="usa-banner-inner">
+            {{ page.header_top }}
+        </div>
+    {% endif %}
+
+    {% if header_basic %}
+    <div class="usa-nav-container">
+        {% endif %}
+        {{ page.header }}
+        <nav class="usa-nav" role="navigation">
+            {% if header_extended %}
+            <div class="usa-nav__inner">
+                {% endif %}
+
+                <button class="usa-nav__close">
+                    <img src="{{ uswds_images }}close.svg" alt="close"/>
+                </button>
+
+                {% if page.mobile_menu %}
+                    <div class="usa-nav-mobile">
+                        {{ page.mobile_menu }}
+                    </div>
+                {% endif %}
+
+                {% if page.mobile_menu %}
+                <div class="usa-nav-desktop">
+                    {% endif %}
+
+                    {% if page.primary_menu %}
+                        {{ page.primary_menu }}
+                    {% endif %}
+
+                    {% if page.secondary_menu %}
+                        {{ page.secondary_menu }}
+                    {% endif %}
+
+                    {% if page.mobile_menu %}
+                </div>
+                {% endif %}
+
+                {% if header_extended %}
+            </div>
+            {% endif %}
+        </nav>
+        {% if header_basic %}
+    </div>
+    {% endif %}
+</header>
+<main class="main-content usa-layout-docs usa-section {{ main_classes }}" role="main" id="main-content">
+    <a id="main-content" tabindex="-1"></a>
+    {# link is in html.html.twig #}
+
+    {#      {{ page.content }}    #}
+
+    <!-- Inserts Highlighted below Hero content -->
+    <!-- Inserts Hero content -->
+    <section class="usa-hero" aria-label="Introduction">
+        <div class="grid-col-12 display-flex flex-column margin-top-3">
+            <div class="flex-align-self-center padding-left-3 grid-col-12 tablet:grid-col-8 desktop:grid-col-5">
+                <span class="bg-primary-dark padding-1 font-sans-xl">Learn about Indian Affairs</span>
+                <div class="gcse-searchbox-only" data-resultsUrl="/search/gce" data-queryParameterName="search"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Inserts Highlighted below Hero content -->
+    <div class="front-page-highlight-cards">
+        <!--<div class="position-absolute bottom-0 mobile-lg:margin-top-5">-->
+        <div class="grid-row border-top border-white">
+            <div class="tablet:grid-col-3 padding-105 border-right serviceblock bg-primary-darker opacity-90">
+                <div class="font-sans-lg display-inline"><i class="fas fa-graduation-cap"></i> Education</div>
+                <p>The BIE implements federal Indian education programs for roughly 46,000 students at 183 schools across the U.S. </p>
+                <a href="https://www.bie.edu" target="_blank" class="services_item_link"></a>
+            </div>
+            <div class="tablet:grid-col-3 padding-105 border-right serviceblock bg-primary-darker opacity-90">
+                <div class="font-sans-lg display-inline"><i class="fas fa-balance-scale"></i> Justice</div>
+                <p>Protecting lives, resources, and property is at the heart of the BIA's law enforcement effort.</p>
+                <a href="https://www.bia.gov/bia/ojs" class="services_item_link"></a>
+            </div>
+            <div class="tablet:grid-col-3 padding-105 border-right serviceblock bg-primary-darker opacity-90">
+                <div class="font-sans-lg display-inline"><i class="fas fa-chart-line"></i> Economic Development</div>
+                <p>Reliable, affordable broadband access is critical to the health and economic wellbeing of tribal communities</p>
+                <a href="https://www.bia.gov/as-ia/ieed" class="services_item_link"></a>
+            </div>
+            <div class="tablet:grid-col-3 padding-105 serviceblock bg-primary-darker opacity-90">
+                <div class="font-sans-lg display-inline"><i class="fas fa-project-diagram"></i> Climate Crises</div>
+                <p>Providing resources and support to federally recognized tribes capacity building in response to the climate crises.</p>
+                <a href="https://www.bia.gov/bia/ots/tribal-climate-resilience-program" class="services_item_link"></a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mini Heros -->
+    <div class="front-page-mini-heroes">
+        <ul class="usa-card-group margin-bottom-0 minihero">
+            <li class="tablet:grid-col usa-card usa-card--flag margin-bottom-0">
+                <div class="usa-card__container radius-0 border-0">
+                    <header class="usa-card__header padding-top-9 padding-x-9">
+                        <div class="font-heading-2xl text-ls-neg-3">Discover</div>
+                    </header>
+                    <div class="usa-card__media radius-0">
+                        <div class="usa-card__img radius-0 width-full">
+                            <img src="/sites/default/files/dup/front-page-youth-dancer.jpg" alt="Youth pow wow dancer - Discover banner image" class="radius-0">
+                        </div>
+                    </div>
+
+                    <div class="usa-card__body padding-x-9">
+                        <p>We maintain government-to-government relationships with Indian tribes, and facilitate support for tribal people and tribal
+                            governments. We promote safe and quality living environments, strong communities, self sufficient and individual rights,
+                            while enhancing protection of the lives, prosperity and well being of American Indians and Alaska Natives.</p>
+                    </div>
+                    <div class="usa-card__footer padding-bottom-9 padding-x-9">
+                        <ul class="usa-button-group">
+                            <li class="usa-button-group__item"><button class="usa-button usa-button--accent-cool"><a href="https://www.bia.gov/jobs">Get a Job</a></button></li>
+                            <li class="usa-button-group__item"><button class="usa-button usa-button--accent-cool"><a href="https://www.bia.gov/jobs/Indian_Preference">Indian Preference</a></button></li>
+                            <li class="usa-button-group__item"><button class="usa-button usa-button--accent-cool"><a href="https://www.bia.gov/bia/ois/tgs/genealogy">Track Your Ancestry</a></button></li>
+                            <li class="usa-button-group__item"><button class="usa-button usa-button--accent-cool"><a href="https://www.bia.gov/sites/bia.gov/files/assets/public/raca/online_forms/pdf/Certificate_of_Degree_of_Indian_Blood_1076-0153_Exp3-31-21_508.pdf">Certificate of Indian Blood</a></button></li>
+                            <li class="usa-button-group__item"><button class="usa-button usa-button--accent-cool"><a href="https://www.federalregister.gov/documents/2020/01/30/2020-01707/indian-entities-recognized-by-and-eligible-to-receive-services-from-the-united-states-bureau-of" target="_blank">Federally Recognized Tribes</a></button></li>
+                        </ul>
+                    </div>
+                </div>
+            </li>
+        </ul>
+
+        <ul class="usa-card-group margin-bottom-0 minihero">
+            <li class="tablet:grid-col usa-card usa-card--flag usa-card--media-right margin-bottom-0">
+                <div class="usa-card__container radius-0 border-0 bg-accent-warm">
+                    <header class="usa-card__header  padding-top-9 padding-x-9">
+                        <div class="font-heading-2xl text-ls-neg-3">Featured Services</div>
+                    </header>
+                    <div class="usa-card__media">
+                        <div class="usa-card__img width-full">
+                            <img src="/sites/default/files/dup/eagle.jpg" alt="A placeholder image">
+                        </div>
+                    </div>
+
+                    <div class="usa-card__body padding-x-9">
+                        <p>Indian Affairs provides services directly or through contracts, grants, or compacts to 574 Federally recognized tribes with a service population
+                            of about 1.9 million American Indian and Alaska Natives. While the role of Indian Affairs has changed significantly in the last three decades
+                            in response to a greater emphasis on Indian self-governance and self-determination, Tribes still look to Indian Affairs for a broad spectrum of services. </p>
+                    </div>
+                    <div class="usa-card__footer padding-bottom-9 padding-x-9">
+                        <div class="grid-row">
+                            <div class="tablet:grid-col-6 font-body-md">
+                                <ul class="add-list-reset">
+                                    <li><a href="/services" class="text-black"><i class="fas fa-flag"></i> Federal Acknowledgement</a></li>
+                                    <li><a href="/economic-development" class="text-black"><i class="fas fa-chart-line"></i> Economic Development</a></li>
+                                </ul>
+                            </div>
+                            <div class="tablet:grid-col-6 font-body-md">
+                                <ul class="add-list-reset">
+                                    <li><a href="/bia/ois/tgs" class="text-black"><i class="fas fa-heart"></i> Indian Gaming</a></li>
+                                    <li><a href="/economic-development" class="text-black"><i class="fas fa-umbrella"></i> Safety and Risk Management</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="float-right margin-top-2"><a href="/" class="text-black font-sans-md">More Services</a></div>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+    <!-- Adds News Front Page View/Block -->
+    <div class="usa-section bg-base-lightest bgPotteryArtwork newscards">
+        {#  Insert new front page news (3x1) view here #}
+         {# drupal_block('views_block:front_page_news_3x1-block_1') #}
+        {{ drupal_block('views_block:front_page_news_3_cards-block_1')  }}
+    </div>
+</main>
+
+<footer class="{{ footer_classes }}" role="contentinfo">
+    <div class="grid-container usa-footer__return-to-top">
+        <a href="#">Return to top</a>
+    </div>
+
+    {% if display_footer_primary %}
+        <div class="usa-footer__primary-section">
+            <div class="usa-footer__primary-content">
+                <div class="grid-container padding-top-3">
+                    {% if page.footer %}
+                        {{ page.footer }}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+    {% if display_footer_secondary %}
+        <div class="usa-footer__secondary-section bg-primary-dark">
+            <div class="grid-container">
+
+                {% if page.footer_secondary %}
+                    {{ page.footer_secondary }}
+                {% endif %}
+
+            </div>
+        </div>
+    {% endif %}
+
+</footer>
+
+{# Identifier #}
+{% if page.identifier %}
+    {{ page.identifier }}
+{% endif %}
+
+<!-- Adds JSON -->
+<script type="application/ld+json">
+    {
+        "@context":"https://schema.org",
+        "@graph":[
+            {
+                "@type":"Organization",
+                "@id":"https://www.bia.gov/#organization",
+                "name":"Indian Affairs (IA)",
+                "url":"https://www.bia.gov/",
+                "sameAs":["https://www.facebook.com/USIndianAffairs/", "https://www.youtube.com/user/bia4432", "https://twitter.com/USIndianAffairs"],
+                "logo":{
+                    "@type":"ImageObject",
+                    "@id":"https://www.bia.gov/#logo",
+                    "url":"https://www.bia.gov/sites/default/files/image/logo.png",
+                    "width":300,
+                    "height":300,
+                    "caption":"Indian Affairs"
+                },
+                "image":{
+                    "@id":"https://www.bia.gov/#logo"
+                },
+                "legalName":"U.S. Department of the Interior, Indian Affairs"
+            },
+            {
+                "@type":"WebSite",
+                "@id":"https://www.bia.gov/#website",
+                "url":"https://www.bia.gov/",
+                "name":"Indian Affairs",
+                "description":"Indian Affairs in the Department of the Interior encompasses the Office of the Assistant Secretary-Indian Affairs(ASIA), the Bureau of Indian Affairs(BIA) and the Bureau of Indian Education (BIE).  Through its bureaus, offices and programs, Indian Affairs carries out the United States’ government-to-government relationship with the Federally recognized tribes, and to maintain its unique and continuing responsibility to the American Indian/Alaska Native people. Indian Affairs supports and assists the tribes as they develop their governmental structures and operations; build strong, safe communities; and provide services to their members.",
+                "publisher":{
+                    "@id":"https://www.bia.gov/#organization"
+                },
+                "potentialAction":{
+                    "@type":"SearchAction",
+                    "target":"https://www.bia.gov/cse?search={search_term_string}",
+                    "query-input":"required name=search_term_string"
+                }
+            }
+        ]
+    }
+</script>

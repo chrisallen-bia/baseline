@@ -1,0 +1,18 @@
+{%
+    set title_classes = [
+    label_display == 'visually_hidden' ? 'usa-sr-only',
+    'call-out'
+]
+%}
+
+<section id="next-steps" class="margin-y-4">
+    {% if not label_hidden %}
+        {% set header_id = label|clean_id %}
+
+        <h2{{ title_attributes.addClass(title_classes).setAttribute('id', header_id) }}>{{ label }}</h2>
+    {% endif %}
+
+    {% for item in items %}
+        <div{{ item.attributes }}>{{ item.content }}</div>
+    {% endfor %}
+</section>

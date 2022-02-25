@@ -1,0 +1,105 @@
+{#
+/**
+ * @file
+ * Theme override for a Contact Us card field.
+ *
+ * To override output, copy the "field.html.twig" from the templates directory
+ * to your theme's directory and customize it, just like customizing other
+ * Drupal templates such as page.html.twig or node.html.twig.
+ *
+ * Instead of overriding the theming for all fields, you can also just override
+ * theming for a subset of fields using
+ * @link themeable Theme hook suggestions. @endlink For example,
+ * here are some theme hook suggestions that can be used for a field_foo field
+ * on an article node type:
+ * - field--node--field-foo--article.html.twig
+ * - field--node--field-foo.html.twig
+ * - field--node--article.html.twig
+ * - field--field-foo.html.twig
+ * - field--text-with-summary.html.twig
+ * - field.html.twig
+ *
+ * Available variables:
+ * - attributes: HTML attributes for the containing element.
+ * - label_hidden: Whether to show the field label or not.
+ * - title_attributes: HTML attributes for the title.
+ * - label: The label for the field.
+ * - multiple: TRUE if a field can contain multiple items.
+ * - items: List of all the field items. Each item contains:
+ *   - attributes: List of HTML attributes for each item.
+ *   - content: The field item's content.
+ * - entity_type: The entity type to which the field belongs.
+ * - field_name: The name of the field.
+ * - field_type: The type of the field.
+ * - label_display: The display settings for the label.
+ *
+ * @see template_preprocess_field()
+ */
+#}
+
+<div class="bg-base-lighter radius-lg padding-2">
+    <h3>Contact Us</h3>
+    <div class="grid-row">
+        <div class="grid-col-12 tablet:grid-col">
+            {# Org Name and Address #}
+            <div class="grid-row grid-gap-2 margin-y-1">
+                <div class="grid-col-1"><i class="fas fa-money-check-edit" aria-hidden="true"></i></div>
+                <div class="grid-col-11">
+                    {% if items.0.content['#node'].field_address.0.organization %}
+                        <span class="text-bold">{{ items.0.content['#node'].field_address.0.organization }}</span>
+                    {% endif %}
+                    {% if address_full %}
+                        {% set address_full_html = {
+                            '#type':   'processed_text',
+                            '#text':    address_full,
+                            '#format': 'full_html',
+                        } %}
+                        <address>{{ address_full_html }}</address>
+                    {% endif %}
+
+                        {{ items.0.content['#node'].field_serviceevent_mapurl }}
+                </div><!-- /.padding-left-3 -->
+            </div><!-- /.grid-row -->
+            {# Hours #}
+            {% if items.0.content['#node'].field_contactus_phonecallhours.0.value %}
+                <div class="grid-row grid-gap-2 margin-y-1">
+                    <div class="grid-col-1 margin-top-05"><i class="fas fa-clock" aria-hidden="true"></i></div>
+                    <div class="grid-col-11">
+                        <span>Hours</span><br>
+                        <span>{{ items.0.content['#node'].field_contactus_phonecallhours.0.value }}</span>
+                    </div>
+                </div><!-- /.grid-row margin-y-1 -->
+            {% endif %}
+        </div><!-- /.tablet:grid-col -->
+        <div class="grid-col-12 tablet:grid-col-5">
+            {# Email #}
+            {% if items.0.content['#node'].field_email.0.value %}
+                <div class="grid-row grid-gap-2 margin-y-1">
+                    <div class="grid-col-1"><i class="fas fa-envelope"></i></div>
+                    <div class="grid-col-11">Email<br>
+                        <span class="text-bold font-sans-md"><a href="mailto:{{ items.0.content['#node'].field_email.0.value }}" target="_blank">{{ items.0.content['#node'].field_email.0.value }}</a></span>
+                    </div>
+                </div><!-- /.grid-row -->
+            {% endif %}
+
+            {# Telephone #}
+            {% if items.0.content['#node'].field_telephone.0.value %}
+                <div class="grid-row grid-gap-2 margin-top-1">
+                    <div class="grid-col-1 margin-top-05"><i class="fas fa-phone" aria-hidden="true"></i></div>
+                    <div class="grid-col-11">Telephone<br> <span class="text-bold font-sans-md"><a
+                                    href="tel:{{ items.0.content['#node'].field_telephone.0.value }}">{{ items.0.content['#node'].field_telephone.0.value }}</a></span></div>
+                </div><!-- /.grid-row margin-top-1 -->
+            {% endif %}
+
+            {# Fax #}
+            {% if items.0.content['#node'].field_fax.0.value %}
+                <div class="grid-row grid-gap-2 margin-top-1">
+                    <div class="grid-col-1 margin-top-05"><i class="fas fa-fax" aria-hidden="true"></i></div>
+                        <div class="grid-col-11">Fax<br>
+                              <span class="text-bold font-sans-md">{{ items.0.content['#node'].field_fax.0.value }}</span>
+                        </div>
+                </div><!-- /.grid-row margin-top-1 -->
+            {% endif %}
+        </div><!-- /.tablet:grid-col float-right -->
+    </div><!-- /.grid-row -->
+</div>

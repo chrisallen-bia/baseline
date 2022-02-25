@@ -1,0 +1,32 @@
+{#
+/**
+ * @file
+ * Default theme implementation to display a 'Guide' node.
+ * ----
+ * @author - christopherj.allen@bia.gov
+ * ----
+#}
+
+{% extends '/themes/custom/ia_uswds_subtheme/templates/includes/node_layout.html.twig' %}
+{% block body %}
+    {{ content }}
+{% endblock body  %}
+
+{% block schema %}
+<!-- JSON Info below -->
+    <!-- D7 had "about"
+    "about": "{#  node.body.0.value|striptags #}",
+           ***  no longer a 'body' field on Guide Content Type ***
+    -->
+    <script type="application/ld+json">
+        {
+            "@context": "schema.org",
+            "@type": "Guide",
+            "name": "{{ node.label|e }}",
+            "text": "{{ content.field_metadata.0['#paragraph'].field_short_description.0.value|spaceless|e}}"
+        }
+    </script>
+{% endblock schema %}
+
+
+

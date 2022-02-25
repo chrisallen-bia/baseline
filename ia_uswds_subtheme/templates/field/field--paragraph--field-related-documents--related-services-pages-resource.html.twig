@@ -1,0 +1,43 @@
+{#
+/**
+ * @file
+ * Theme override for the Summary Box Content field.
+ * ----
+ * @author - christopherj.allen@bia.gov
+ * ----
+ * Available variables:
+ * - attributes: HTML attributes for the containing element.
+ * - label_hidden: Whether to show the field label or not.
+ * - title_attributes: HTML attributes for the title.
+ * - label: The label for the field.
+ * - multiple: TRUE if a field can contain multiple items.
+ * - items: List of all the field items. Each item contains:
+ *   - attributes: List of HTML attributes for each item.
+ *   - content: The field item's content.
+ * - entity_type: The entity type to which the field belongs.
+ * - field_name: The name of the field.
+ * - field_type: The type of the field.
+ * - label_display: The display settings for the label.
+ *
+ * @see template_preprocess_field()
+ */
+#}
+{%
+    set title_classes = [
+    label_display == 'visually_hidden' ? 'usa-sr-only',
+]
+%}
+
+<div{{ attributes }}>
+    {% if label_hidden==false %}
+        {% set list_id = label|clean_id %}
+
+        <h3{{ title_attributes.addClass(title_classes).setAttribute('id', list_id) }}>{{ label }}</h3>
+    {% endif %}
+    <ul class="usa-list">
+        {% for item in items %}
+            <li{{ item.attributes }}>{{ item.content  }}</li>
+        {% endfor %}
+    </ul>
+</div>
+

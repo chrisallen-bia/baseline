@@ -1,0 +1,20 @@
+{#
+/**
+ * @file
+ * Theme override for Node Type = About Our Organization
+ * Field = Short Description (field_org_shortdescription)
+ */
+#}
+{%
+    set title_classes = [
+    label_display == 'visually_hidden' ? 'usa-sr-only'
+]
+%}
+
+{% if label_hidden==false %}
+    <h2 class="call-out margin-top-4" {{ title_attributes.addClass(title_classes)}}>About {{ node_title }}</h2>
+{% endif %}
+
+{% for item in items %}
+    <div{{ item.attributes.addClass(item_classes) }}>{{ item.content }}</div>
+{% endfor %}

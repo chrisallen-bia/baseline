@@ -1,0 +1,27 @@
+{#
+/**
+ * @file
+ * Default theme implementation to display a 'Blog Entry' node.
+ * ----
+ * @author - chad.thoreson@bia.gov
+ * ----
+#}
+
+{% extends '/themes/custom/ia_uswds_subtheme/templates/includes/node_layout.html.twig' %}
+{% block body %}
+    {% if display_submitted and posted_by is not empty %}
+        <footer class="submitted">{{ posted_by }}</footer>
+    {% endif %}
+
+    <div class="content"{{ content_attributes }}>
+        {{ content|without('comments', 'links') }}
+    </div>
+
+    <div class="clearfix">
+        {% if content.links is not empty %}
+            <nav class="links node-links clearfix">{{ content.links }}</nav>
+        {% endif %}
+
+        {{ content.comments }}
+    </div>
+{% endblock body %}

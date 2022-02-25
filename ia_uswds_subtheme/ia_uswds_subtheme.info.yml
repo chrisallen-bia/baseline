@@ -1,0 +1,41 @@
+type: theme
+name: IA U.S. Web Design Standards Sub Theme 2021
+base theme: uswds_base
+description: 'Drupal IA USWDS Sub Theme - The U.S. Web Design System provides design guidelines and code to help you quickly create trustworthy, accessible, and consistent digital government services.'
+package: USWDS Base
+core: 8.x
+core_version_requirement: ^8 || ^9
+logo: 'logo.png'
+screenshot: 'screenshot.png'
+
+regions:
+  page_top: 'Page Top'
+  alert: 'Alert'
+  ia_top_alert: 'IA Top Alert'
+  header_top: 'Above Header'
+  header: 'Header'
+  primary_menu: 'Primary Menu'
+  hero: 'Hero'
+  secondary_menu: 'Secondary Menu'
+  breadcrumb: 'Breadcrumb'
+  sidebar_first: 'First sidebar'
+  sidebar_second: 'Second sidebar'
+  summary_box: 'Summary Box'
+  content: 'Content'
+  footer_menu: 'Footer Menu'
+  footer: 'Primary Footer'
+  footer_secondary: 'Secondary Footer'
+  identifier: 'Identifier'
+  page_bottom: 'Page Bottom'
+
+libraries:
+  - 'ia_uswds_subtheme/assets'
+  - 'uswds_base/framework'
+  - 'ia_uswds_subtheme/ia_uswds'
+  - 'ia_uswds_subtheme/fontawesome'
+  - 'ia_uswds_subtheme/gcse'
+
+# Information added by Drupal.org packaging script on 2020-07-22
+version: '8.x-2.4'
+project: 'uswds_base'
+datestamp: 1595452821

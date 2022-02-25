@@ -1,0 +1,102 @@
+{#
+/**
+ * @file
+ * Default theme implementation to display an 'Online Press Release' node.
+ * ----
+ * @author - chad.thoreson@bia.gov
+ * ----
+#}
+
+{% extends '/themes/custom/ia_uswds_subtheme/templates/includes/node_layout.html.twig' %}
+{% block body %}
+    {% set press_release_date = node.field_opa_opr_date_published.0.value ? node.field_opa_opr_date_published.0.value|date('U')|format_date('custom', 'F j, Y') : '' %}
+
+    {% if content.field_opa_opr_sub_header.0 %}
+    <div class="ia-uswds-banner-info_wrapper">
+        <div class="grid-row grid-gap">
+            <div class="grid-col-12">
+                <div class="pr-sub-header">
+                    <h2>{{ content.field_opa_opr_sub_header.0 }}</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- PRESS RELEASE BANNER INFO-->
+    {% if content.field_opa_opr_sub_header.0 %}
+    <div class="ia-uswds-banner-info_wrapper">
+        <div class="grid-row grid-gap">
+            <div class="grid-col-12">
+                <div class="pr-sub-header">
+                    <h2>{{ content.field_opa_opr_sub_header.0 }}</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- MEDIA CONTACT -->
+    {% if content.field_opa_opr_office_contact_ph.0 or content.field_opa_opr_date_published.0 %}
+    <div class="ia-uswds-banner-info_wrapper">
+        <div class="grid-row grid-gap">
+            <div class="tablet:grid-col-8">
+                <div class="pr-sub-header">
+                    <strong>Media Contact: </strong>{{ content.field_opa_opr_office_contact_ph.0 }}
+                    <br/>
+                    <strong>For Immediate Release: </strong>{{ press_release_date }}
+                </div><!-- /.pr-sub-header -->
+            </div><!-- /.grid-col-8 -->
+
+            <div class="tablet:grid-col-4">
+                <div class="printer-friendly-custom-button">
+                    <!-- php print print_insert_link();?> -->
+                    <a href="#">Printer-friendly version</a>
+                </div>
+            </div><!-- /.grid-col-4 -->
+        </div><!-- /.grid-row grid-gap -->
+    </div><!-- /.ia-uswds-banner-info_wrapper -->
+    {% endif %}
+    <!-- /MEDIA CONTACT -->
+
+    <!-- MAIN BODY CONTENT -->
+    {% if content.field_opa_opr_image.0 %}
+    <!-- If content has images use this -->
+    <div class="ia-uswds-pr-with-media">
+        <div class="grid-row grid-gap">
+            <div class="tablet:grid-col-8">
+                <div class="pr-body">
+                    {{ content.body }}
+                    <strong>For Immediate Release: </strong>{{ press_release_date }}
+                </div><!-- /.pr-body -->
+            </div><!-- /.grid-col-8 -->
+
+            <div class="tablet:grid-col-4">
+                <div class="pr-images">
+                    {{ content.field_opa_opr_image }}
+                </div><!-- /.pr-images -->
+            </div><!-- /.grid-col-4 -->
+        </div><!-- /.grid-row grid-gap -->
+    </div><!-- /.ia-uswds-pr-with-media -->
+    {% else %}
+    <!-- If no images on content, use the following (full width body) -->
+    <div class="ia-uswds-pr-no-media">
+        <div class="grid-row grid-gap">
+            <div class="grid-col-12">
+                <div class="pr-body">
+                    {{ content.body }}
+                </div><!-- /.pr-body -->
+            </div><!-- /.grid-col-12 -->
+        </div><!-- /.grid-row grid-gap -->
+    </div><!-- /.ia-uswds-pr-no-media -->
+    {% endif %}
+    <!-- /MAIN BODY CONTENT -->
+
+    <!-- ASSOCIATED FILES -->
+    {% if content.field_opa_opr_files.0 %}
+    <div class="grid-col-12">
+        <strong>Associated Files:</strong><br/>
+        {{ content.field_opa_opr_files }}
+    </div><!-- /.grid-col-12 -->
+    {% endif %}
+{% endblock body %}

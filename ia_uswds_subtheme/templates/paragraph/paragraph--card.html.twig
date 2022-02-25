@@ -1,0 +1,56 @@
+{# Get Cards Paragraph settings #}
+{% set parent = paragraph._referringItem.parent.parent.entity %}
+{% set layout = parent.fields['field_card_layout'].value %}
+{% set columns = parent.fields['field_column_layout'].value %}
+{% set showImages = parent.fields['field_show_images'].value %}
+{% set flagAlign = content.field_image_alignment['#items'].getString() %}
+{% set fullWidthImages = parent.fields['field_full_width_images'].value %}
+
+{# Check if image added to Paragraph #}
+{% set hasImage = node.field_image.isEmpty() == false %}
+
+{# Set number of Columns #}
+{% set cardLayout = layout == 'default' ? columns : '6' %}
+
+{# Create Layout and Column classes #}
+{% set listClasses = [
+    'tablet:grid-col-' ~ cardLayout,
+    'usa-card',
+    layout == 'flag' ? 'usa-card--flag',
+    flagAlign == 'right' and layout == 'flag' ? 'usa-card--media-right'
+]
+%}
+
+{# Set Media and Exdent/Inset classes, Flag layout can only have 'usa-card__media' #}
+{% if layout == 'flag' %}
+    {% set mediaClasses = 'usa-card__media' %}
+{% else %}
+    {% set mediaClasses = fullWidthImages == '1' and layout == 'default' ? 'usa-card__media usa-card__media--exdent' : 'usa-card__media usa-card__media--inset' %}
+{% endif %}
+
+{% block paragraph %}
+    <li {{ attributes.addClass(listClasses) }}>
+        <div class="usa-card__container">
+            {% block content %}
+                <header class="usa-card__header">
+                    <h3 class="usa-card__heading">{{ content.field_title }}</h3>
+                </header>
+                {% if (layout == 'flag' and hasImage) or (hasImage and showImages == '1') %}
+                    <div class="{{ mediaClasses }}">
+                        <div class="usa-card__img">
+                            {{ content.field_image }}
+                        </div>
+                    </div>
+                {% endif %}
+                <div class="usa-card__body">
+                    {{ content.field_message }}
+                </div>
+                <div class="usa-card__footer">
+                    <button class="usa-button">
+                        {{ content.field_action_button.0['#title'] }}
+                    </button>
+                </div>
+            {% endblock %}
+        </div>
+    </li>
+{% endblock paragraph %}

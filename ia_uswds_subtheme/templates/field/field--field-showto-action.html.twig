@@ -1,0 +1,15 @@
+{# Action Links #}
+{%
+    set classes = [
+        'tablet:grid-col-4',
+        'blue-rounded-cards'
+]
+%}
+
+<section id="quick-action" class="margin-y-4">
+    <div class="grid-row grid-gap-2">
+        {% for item in items %}
+            <div{{ item.attributes.addClass(classes) }}>{{ item.content }}</div>
+        {% endfor %}
+    </div>
+</section>

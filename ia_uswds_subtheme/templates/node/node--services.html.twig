@@ -1,0 +1,23 @@
+{#
+/**
+ * @file
+ * Default theme implementation to display a 'Services' node.
+ * ----
+ * @author -
+ * ----
+#}
+{% extends '/themes/custom/ia_uswds_subtheme/templates/includes/node_layout.html.twig' %}
+{% block body %}
+
+    <div class="submitted">
+        {{ node.createdtime }}
+    </div>
+
+    <div class="content clearfix">
+        {{ content|without('comments', 'links') }}
+        {{ content.comments }}
+    </div>
+
+    {{ content.field_primary_links }}
+
+{% endblock body %}

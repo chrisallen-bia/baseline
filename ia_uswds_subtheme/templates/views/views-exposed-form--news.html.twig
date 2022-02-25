@@ -1,0 +1,26 @@
+{#
+/**
+ * @file
+ * Default theme implementation of a views exposed form.
+ *
+ * Available variables:
+ * - form: A render element representing the form.
+ *
+ * @see template_preprocess_views_exposed_form()
+ *
+ * @ingroup themeable
+ */
+#}
+
+{% if q is not empty %}
+    {#
+    This ensures that, if clean URLs are off, the 'q' is added first,
+    as a hidden form element, so that it shows up first in the POST URL.
+    #}
+    {{ q }}
+{% endif %}
+
+{{ form }}
+<div class="grid-offset-8 margin-y-4 position-absolute right-0 top-0">
+    <button class="usa-button usa-button--outline"><a href="/news/archive">Past News Items</a></button>
+</div>

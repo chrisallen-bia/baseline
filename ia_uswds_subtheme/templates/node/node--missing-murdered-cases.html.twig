@@ -1,0 +1,30 @@
+{# Control the order in Manage Display #}
+{% extends '/themes/custom/ia_uswds_subtheme/templates/includes/node_layout.html.twig' %}
+{% block body %}
+        {% set withouts = ['field_hero', 'field_mmu_case_type', 'field_workbench'] %}
+        {{ content|without(withouts) }}
+{% endblock body  %}
+
+{% block schema %}
+        {# JSON Info below #}
+        {% set mmu_case_type_for_schema = content.field_mmu_case_type.0['#markup']|spaceless|e %}
+        {% set mmu_case_last_seen_loc = content.group_profile.group_card_flag.group_sub_bio.field_mmu_last_loc.0['#context'].value|spaceless|e %}
+        {% set mmu_case_date_for_schema = content.group_submitting_case_informatio.group_background.field_date['#items'].0.value %}
+        {% set mmu_case_information_for_schema = content.group_profile.group_card_flag.group_sub_bio.field_mmu_case_information.0['#text']|spaceless|e %}
+        {# mmu_case_profile_photo comes from preprocess function #}
+
+        <script type='application/ld+json'>
+                {
+                        "@context": "https://schema.org",
+                        "@type": "WebPage",
+                        "name": "{{ node.label|e ~ ' ' ~ mmu_case_type_for_schema ~ ' in ' ~ mmu_case_last_seen_loc ~ ' on ' ~ mmu_case_date_for_schema }}",
+                        "url": "{{ url }}",
+                        "description": "{{ node.label|e ~ ' - ' ~  mmu_case_type_for_schema ~ '. ' ~ mmu_case_information_for_schema }}",
+                        "dateModified": "{{ node.getChangedTime()|format_date('custom', 'Y-m-d H:i:s') }}",
+                        "image": {
+                                "url": "{{ mmu_case_profile_photo }}",
+                                "@type": "ImageObject"
+                        }
+                }
+        </script>
+{% endblock schema %}

@@ -1,0 +1,32 @@
+{%
+    set classes = [
+    'paragraph',
+    'paragraph--type--' ~ paragraph.bundle|clean_class,
+    view_mode ? 'paragraph--view-mode--' ~ view_mode|clean_class,
+    not paragraph.isPublished() ? 'paragraph--unpublished'
+]
+%}
+{% block paragraph %}
+    {% block content %}
+        {# Information #}
+{% set fr_date = content.field_date.0["#attributes"]["datetime"] %}
+
+<div class="grid-row margin-top-1">
+<div class="grid-col-1">
+<div class="usa-collection__calendar-date border-accent-warm">
+      <time>
+        <span class="usa-collection__calendar-date-month bg-accent-warm text-black">{{ fr_date | date('U') | format_date('custom', 'M') }} </span>
+        <span class="usa-collection__calendar-date-day text-black">{{ fr_date | date('U') | format_date('custom', 'd') }} </span>
+        <span class="usa-collection__calendar-date-day border-top-1px border-accent-warm text-black">{{ fr_date | date('U') | format_date('custom', 'Y') }}</span>
+      </time>
+</div>
+</div>
+<div class="grid-col-11">
+     <div class="usa-collection__body">
+      <h3 class="usa-collection__heading">{{ content.field_link }} </h3>
+      <p class="usa-collection__description">{{ content.field_content_paragraph }}</p>
+</div>
+</div>   
+</div> 
+{% endblock %}
+{% endblock paragraph %}

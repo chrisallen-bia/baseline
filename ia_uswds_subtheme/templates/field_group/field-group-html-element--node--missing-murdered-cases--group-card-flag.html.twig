@@ -1,0 +1,38 @@
+{#
+/**
+ * @file
+ * Default theme implementation for a fieldgroup html element.
+ *
+ * Available variables:
+ * - title: Title of the group.
+ * - title_element: Element to wrap the title.
+ * - children: The children of the group.
+ * - wrapper_element: The html element to use
+ * - attributes: A list of HTML attributes for the group wrapper.
+ *
+ * @see template_preprocess_field_group_html_element()
+ *
+ * @ingroup themeable
+ */
+#}
+
+{%
+    set section_title = attributes.id
+%}
+
+{#<{{ wrapper_element }} {{ attributes.removeAttribute('id') }}>#}
+{% if title %}
+    <{{ title_element }}{{ title_attributes.setAttribute('id', section_title) }}>{{ title }}</{{ title_element }}>
+{% endif %}
+
+<div class="grid-col-12">
+    <ul class="usa-card-group margin-bottom-0 minihero">
+        <li class="tablet:grid-col usa-card usa-card--flag margin-bottom-0">
+            <div class="usa-card__container radius-0 border-0 bg-primary">
+                {{ children }}
+            </div>
+        </li>
+    </ul>
+</div>
+
+{#</{{ wrapper_element }}>#}

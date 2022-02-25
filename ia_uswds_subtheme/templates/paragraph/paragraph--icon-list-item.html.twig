@@ -1,0 +1,17 @@
+{% block paragraph %}
+    <li class="usa-icon-list__item">
+        {% block content %}
+            <div class="usa-icon-list__icon text-green">
+                <i class="{{ content.field_icon_list_item_icon['#items'].getString() }} fa-fw"></i>
+            </div>
+            <div class="usa-icon-list__content">
+                {% if content.field_title[0] is not empty %}
+                    <h3 class="usa-icon-list__title">{{ content.field_title }}</h3>
+                {% endif %}
+                {% if content.field_icon_list_item_text[0] is not empty %}
+                    <p class="margin-bottom-2">{{ content.field_icon_list_item_text }}</p>
+                {% endif %}
+            </div>
+        {% endblock %}
+    </li>
+{% endblock paragraph %}

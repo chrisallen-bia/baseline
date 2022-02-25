@@ -1,0 +1,20 @@
+{%
+    set classes = [
+    'border',
+    'border-width-2px',
+    'border-primary',
+    'padding-3',
+    'text-center',
+    'radius-md',
+]
+%}
+
+{% if paragraph.field_infosec_subtitle %}
+    <h2 class="call-out"> {{ content.field_infosec_subtitle }} </h2>
+    <p>{{ content.field_infosec_paragraph }}</p>
+    <div class="grid-row grid-gap-2">
+        <div class="tablet:grid-col-4 ">
+            {{ content.field_guide_sec_keyaction(attributes.addClass(classes)) }}
+        </div>
+    </div>
+{% endif %}
